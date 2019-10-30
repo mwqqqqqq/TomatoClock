@@ -26,4 +26,6 @@
     <string name="woman">女</string>
     <string name="rregister">注册</string>
     <string name="returnlogin">返回登录界面</string>
+
+    <string name="coin">金币商店</string>
 </resources>

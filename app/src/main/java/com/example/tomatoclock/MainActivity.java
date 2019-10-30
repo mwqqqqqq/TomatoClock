@@ -23,8 +23,23 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import java.lang.reflect.Array;
+
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    // 金币数，背景图片总数，背景图购买数组
+    // 目前是本地初始化，后续从服务器上下载
+    public static int coins = 100;
+    public static int BackImg_num = 5;
+    public static int[] BackImg = {0,1,0,0,0};
+    public static int Alarm_num = 5;
+    public static int[] Alarm = {0,0,0,0,0};
+    // 当前应用的背景图片ID，闹铃声ID
+    public static int Current_BackImg = - 1;
+    public static int Current_Alarm = - 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +111,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_tools) {
+            Intent intent=new Intent(MainActivity.this,Coin.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 
@@ -107,4 +124,22 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    // 从其他Activity返回到该Activity时进行刷新, 主要目的是为了更换背景图片、响铃声
+    @Override
+    protected void onResume() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        super.onResume();
+        if (Current_BackImg == 0 )
+            drawer.setBackgroundResource(R.mipmap.back0);
+        else if (Current_BackImg == 1 )
+            drawer.setBackgroundResource(R.mipmap.back1);
+        else if (Current_BackImg == 2 )
+            drawer.setBackgroundResource(R.mipmap.back2);
+        else if (Current_BackImg == 3 )
+            drawer.setBackgroundResource(R.mipmap.back3);
+        else if (Current_BackImg == 4 )
+            drawer.setBackgroundResource(R.mipmap.back4);
+
+    }
+
 }
