@@ -28,4 +28,6 @@
     <string name="returnlogin">返回登录界面</string>
 
     <string name="coin">金币商店</string>
+    <string name="DDLList">DDL列表</string>
+
 </resources>

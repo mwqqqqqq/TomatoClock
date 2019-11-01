@@ -3,6 +3,7 @@ package com.example.tomatoclock;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.tomatoclock.Task.TasksActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -105,7 +106,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(this, TasksActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(this, ShowReport.class);
             startActivity(intent);
