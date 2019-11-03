@@ -15,6 +15,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".Coin"></activity>
         <activity android:name=".Task.TasksActivity"></activity>
+        <activity android:name=".Task.TaskEditActivity"></activity>
         <activity android:name=".report.ShowReport" />
         <activity
             android:name=".MainActivity"

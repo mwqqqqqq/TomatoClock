@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/taskEditItem"
+        android:title="编辑" />
+    <item
+        android:id="@+id/taskDeleteItem"
+        android:title="删除" />
+    <item
+        android:id="@+id/taskBeginItem"
+        android:title="开始" />
+</menu>
