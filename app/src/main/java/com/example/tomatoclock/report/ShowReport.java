@@ -1,7 +1,11 @@
 package com.example.tomatoclock.report;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +25,7 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -29,7 +34,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 
+import com.example.tomatoclock.Coin;
+import com.example.tomatoclock.MainActivity;
 import com.example.tomatoclock.R;
+import com.example.tomatoclock.Task.TasksActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +49,7 @@ import java.util.List;
 
 
 public class ShowReport extends AppCompatActivity implements
-        DatePickerDialog.OnDateSetListener
+        DatePickerDialog.OnDateSetListener,NavigationView.OnNavigationItemSelectedListener
 {
     MyLineChartView chartView;
     List<String> xValues;   //x轴数据集合
@@ -70,6 +80,21 @@ public class ShowReport extends AppCompatActivity implements
         //文字，标题，等待风格统一
         //reportTitle = findViewById(R.id.reportTitle);
         //Spannable focusTodayTextStr =  new SpannableString("简报");
+
+        //adding
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        if(toolbar == null)
+            System.out.println("null toolbar");
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        //adding over
 
 
 
@@ -340,7 +365,35 @@ public class ShowReport extends AppCompatActivity implements
         continuousFocusDaysText.setBackgroundResource(R.drawable.text_view_border);
 
     }
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
+        if (id == R.id.nav_home) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+            Intent intent = new Intent(this, TasksActivity.class);
+            startActivity(intent);
+            //System.out.println("aaa");
+        } else if (id == R.id.nav_slideshow) {
+            Intent intent = new Intent(this, ShowReport.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_tools) {
+            Intent intent=new Intent(this, Coin.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
 
 
