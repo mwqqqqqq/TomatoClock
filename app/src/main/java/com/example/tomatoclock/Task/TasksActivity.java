@@ -19,7 +19,10 @@ public class TasksActivity extends AppCompatActivity {
     private List<Task> taskList = new ArrayList<>();
     private RecyclerView taskRecylerView;
     private TaskAdapter taskAdapter;
+
     private final int EDITTASK = 1;
+    private final int NEWTASK = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +47,16 @@ public class TasksActivity extends AppCompatActivity {
         }
     }
 
-    public void addTask(View view){
-        Task task = new Task(11, "2019-10-18", 11+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\naaa\na");
-        taskAdapter.addData(task);
-    }
-
     public void editTask(int list_id, String infor){
         Intent intent = new Intent(TasksActivity.this, TaskEditActivity.class);
         intent.putExtra("list_id", list_id);
         intent.putExtra("infor", infor);
         startActivityForResult(intent, EDITTASK);
+    }
+
+    public void newTask(View view){
+        Intent intent = new Intent(TasksActivity.this, TaskNewActivity.class);
+        startActivityForResult(intent, NEWTASK);
     }
 
     @Override
@@ -66,6 +69,15 @@ public class TasksActivity extends AppCompatActivity {
                     String newInfor = data.getStringExtra("infor");
                     taskList.get(task_id).updateInfor(newInfor);
                     taskAdapter.notifyItemChanged(task_id);
+                }
+                break;
+            case NEWTASK:
+                if(resultCode == RESULT_OK){
+                    String infor = data.getStringExtra("infor");
+                    String ddl = data.getStringExtra("ddl");
+                    Task new_task = new Task(0, ddl, infor);
+                    taskList.add(new_task);
+                    taskAdapter.notifyItemInserted(taskList.indexOf(new_task));
                 }
                 break;
             default:
