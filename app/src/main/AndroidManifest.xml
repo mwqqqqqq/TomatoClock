@@ -15,7 +15,9 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".Coin"></activity>
         <activity android:name=".Task.TasksActivity"></activity>
-        <activity android:name=".report.ShowReport" />
+        <activity android:name=".report.ShowReport"
+            android:label="Report"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
