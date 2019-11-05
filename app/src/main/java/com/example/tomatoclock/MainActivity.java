@@ -9,7 +9,7 @@ import com.example.tomatoclock.Task.TasksActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
+import java.util.Calendar;
 import android.os.SystemClock;
 import android.view.View;
 
@@ -49,18 +49,14 @@ public class MainActivity extends AppCompatActivity
     // 当前应用的背景图片ID，闹铃声ID
     public static int Current_BackImg = - 1;
     public static int Current_Alarm = - 1;
-
+    public Calendar calendar = Calendar.getInstance();
     private int startTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         // 用于传专注信息
-        Focus ff = new Focus();
-        ff.startHour = 20;
-        ff.startMinute = 10;
-        ff.dura = 12;
-        flist.add(ff);
+        final Focus ff = new Focus();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -101,6 +97,8 @@ public class MainActivity extends AppCompatActivity
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 // 开始记时
                 chronometer.start();
+                ff.startHour = calendar.get(Calendar.HOUR_OF_DAY);
+                ff.startMinute = calendar.get(Calendar.MINUTE);
             }
         });
 
@@ -109,8 +107,9 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 // 停止
                 chronometer.stop();
+                ff.dura = ((int)SystemClock.elapsedRealtime()- (int)chronometer.getBase()) / 1000;
+                flist.add(ff);
             }
-
         });
         // 重置
         btnRest.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +127,8 @@ public class MainActivity extends AppCompatActivity
                         if (SystemClock.elapsedRealtime()
                                 - chronometer.getBase() > startTime * 1000) {
                             chronometer.stop();
+                            ff.dura = startTime * 1000;
+                            flist.add(ff);
                             // 给用户提示
                             showDialog();
                         }
