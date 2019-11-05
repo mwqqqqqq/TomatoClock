@@ -31,10 +31,13 @@ import android.widget.Chronometer;
 import android.widget.EditText;
 
 import java.lang.reflect.Array;
-
+import java.util.ArrayList;
+import com.example.tomatoclock.report.Focus;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    // 用于传专注信息
+    public static ArrayList<Focus> flist = new ArrayList<Focus>();
 
     // 金币数，背景图片总数，背景图购买数组
     // 目前是本地初始化，后续从服务器上下载
@@ -51,6 +54,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // 用于传专注信息
+        Focus ff = new Focus();
+        ff.startHour = 20;
+        ff.startMinute = 10;
+        ff.dura = 12;
+        flist.add(ff);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);

@@ -131,6 +131,7 @@ public class ShowReport extends AppCompatActivity implements
         focus2.startMinute=40;
         focus2.dura = 45;
         focusList.add(focus2);
+        focusList.add(MainActivity.flist.get(0));
         chartView.setFocusList(focusList);
         //
 
