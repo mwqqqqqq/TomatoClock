@@ -25,7 +25,7 @@ public class TaskNewActivity extends AppCompatActivity {
         taskInforText = (EditText) findViewById(R.id.taskNew_editText);
         taskDdlText = (TextView) findViewById(R.id.taskNew_ddlText);
         String taskinfor = "";
-        String taskddl = "2019-11-1";
+        String taskddl = "2019-11-10";
         taskInforText.setText(taskinfor);
         taskDdlText.setText(taskddl);
         setListener();
@@ -45,7 +45,7 @@ public class TaskNewActivity extends AppCompatActivity {
                         String ddl = year + "-" + monthStr + "-" + dayStr;
                         taskDdlText.setText(ddl);
                     }
-                }, 2019, 11, 1).show();
+                }, 2019, 11, 10).show();
             }
         });
     }
