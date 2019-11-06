@@ -121,17 +121,24 @@ public class ShowReport extends AppCompatActivity implements
         int startHour = Integer.parseInt(givenHour);
         int startMinute = Integer.parseInt(givenMinute);
 
-        Focus focus1 = new Focus();
-        focus1.startHour = startHour;
-        focus1.startMinute = startMinute;
-        focus1.dura = dura;
-        focusList.add(focus1);
-        Focus focus2 = new Focus();
-        focus2.startHour = 13;
-        focus2.startMinute=40;
-        focus2.dura = 45;
-        focusList.add(focus2);
-        focusList.add(MainActivity.flist.get(0));
+//        Focus focus1 = new Focus();
+//        focus1.startHour = startHour;
+//        focus1.startMinute = startMinute;
+//        focus1.dura = dura;
+//        focusList.add(focus1);
+//        Focus focus2 = new Focus();
+//        focus2.startHour = 13;
+//        focus2.startMinute=40;
+//        focus2.dura = 45;
+//        focusList.add(focus2);
+        int totalMin = 0;
+        for (int i = 0;i < MainActivity.flist.size();i++)
+        {
+            focusList.add(MainActivity.flist.get(i));
+            System.out.print("ffl:"+MainActivity.flist.get(i).startHour + ":"+MainActivity.flist.get(i).startMinute+MainActivity.flist.get(i).dura);
+            totalMin = totalMin + MainActivity.flist.get(i).dura;
+        }
+       // focusList.add(MainActivity.flist.get(0));
         chartView.setFocusList(focusList);
         //
 
@@ -141,7 +148,7 @@ public class ShowReport extends AppCompatActivity implements
         //TextPaint paint = focusTodayText.getPaint();
         //paint.setFakeBoldText(true);
         String focusTodayTextStr1 = "今日专注时长:\n";
-        String focusTodayTextStr2 = "30";
+        String focusTodayTextStr2 = String.valueOf(totalMin);
         String focusTodayTextStr3 = "分钟";
 
         Spannable focusTodayTextStr =  new SpannableString(focusTodayTextStr1+focusTodayTextStr2+focusTodayTextStr3);
@@ -207,22 +214,28 @@ public class ShowReport extends AppCompatActivity implements
         //focusRecords.setMinimumHeight();
         //测试
         List<Focus> afocus = new ArrayList<>();
-        Focus f1 = new Focus();
-        f1.startHour = 2;
-        f1.startMinute = 30;
-        Focus f2 = new Focus();
-        f2.startHour = 3;
-        f2.startMinute = 30;
-        Focus f3 = new Focus();
-        f3.startHour = 4;
-        f3.startMinute = 40;
-        Focus f4 = new Focus();
-        f4.startHour = 5;
-        f4.startMinute = 50;
-        afocus.add(f1);
-        afocus.add(f2);
-        afocus.add(f3);
-        afocus.add(f4);
+//        Focus f1 = new Focus();
+//        f1.startHour = 2;
+//        f1.startMinute = 30;
+//        Focus f2 = new Focus();
+//        f2.startHour = 3;
+//        f2.startMinute = 30;
+//        Focus f3 = new Focus();
+//        f3.startHour = 4;
+//        f3.startMinute = 40;
+//        Focus f4 = new Focus();
+//        f4.startHour = 5;
+//        f4.startMinute = 50;
+//        afocus.add(f1);
+//        afocus.add(f2);
+//        afocus.add(f3);
+//        afocus.add(f4);
+        for (int i = 0;i < MainActivity.flist.size();i++)
+        {
+            afocus.add(MainActivity.flist.get(i));
+            System.out.print("ffl:"+MainActivity.flist.get(i).startHour + ":"+MainActivity.flist.get(i).startMinute+MainActivity.flist.get(i).dura);
+
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         focusRecords.setLayoutManager(layoutManager);
