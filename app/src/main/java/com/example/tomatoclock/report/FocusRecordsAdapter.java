@@ -61,6 +61,7 @@ public class FocusRecordsAdapter extends RecyclerView.Adapter<FocusRecordsAdapte
     @Override
     public int getItemCount()
     {
+
         return mFocusRecords.size();
     }
 }
