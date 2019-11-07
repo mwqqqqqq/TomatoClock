@@ -27,6 +27,7 @@ import android.text.format.Time;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import com.example.tomatoclock.report.Focus;
 
@@ -92,12 +93,11 @@ public class MainActivity extends AppCompatActivity
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 // 开始记时
                 chronometer.start();
-                Time t = new Time("GMT+8");
-                t.setToNow();
-                ff.startHour = t.hour + 8;
-                ff.startMinute = t.minute;
-            }
-        });
+                Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+8"));
+                ff.startHour = cal.get(Calendar.HOUR_OF_DAY);
+                ff.startMinute = cal.get(Calendar.MINUTE);
+                }
+            });
 
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
