@@ -108,6 +108,7 @@ public class MyLineChartView extends View {
 
         paintBlue = new Paint(Paint.ANTI_ALIAS_FLAG);//线条颜色
         paintBlue.setColor(Color.parseColor("#FFA500"));
+        //paintBlue.setStrokeWidth()
         paintBlue.setStrokeWidth(40);
         paintBlue.setStrokeCap(Paint.Cap.ROUND);
         paintBlue.setStyle(Paint.Style.STROKE);
@@ -258,9 +259,9 @@ public class MyLineChartView extends View {
             Path path = new Path();
             double start = focusList.get(i).startHour + focusList.get(i).startMinute/60.0;
             double dura = focusList.get(i).dura / 60.0;
-            path.moveTo((float)(firstPointX+ start * intervalX),(float)(mHeight/2.0));
+            path.moveTo((float)(firstPointX+ start * intervalX + paintBlue.getStrokeWidth()/2),(float)(mHeight/2.0));
 
-            path.lineTo((float)(firstPointX + (start+dura) * intervalX),(float)(mHeight/2.0));
+            path.lineTo((float)(firstPointX + (start+dura) * intervalX-paintBlue.getStrokeWidth()/2),(float)(mHeight/2.0));
             canvas.drawPath(path, paintBlue);
         }
         //画第二条线

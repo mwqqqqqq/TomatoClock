@@ -37,15 +37,24 @@ import android.widget.TimePicker;
 import com.example.tomatoclock.Coin;
 import com.example.tomatoclock.MainActivity;
 import com.example.tomatoclock.R;
+import com.example.tomatoclock.StreamTools;
 import com.example.tomatoclock.Task.TasksActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
-
+import java.util.TimeZone;
 
 
 public class ShowReport extends AppCompatActivity implements
@@ -72,6 +81,13 @@ public class ShowReport extends AppCompatActivity implements
     int year,month,day;
 
     String stringOfCurve;
+    public static String getLocalDatetimeString(String local) {
+        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone(local));
+        cal.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
+        String date = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
+        String time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND);
+        return date + " " + time;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +103,7 @@ public class ShowReport extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         if(toolbar == null)
             System.out.println("null toolbar");
+       // System.out.println("Local Time is " + getLocalDatetimeString("GMT+8"));
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -134,8 +151,11 @@ public class ShowReport extends AppCompatActivity implements
         int totalMin = 0;
         for (int i = 0;i < MainActivity.flist.size();i++)
         {
+            //MainActivity.flist.get(i).startHour=8;
+            //MainActivity.flist.get(i).startMinute=0;
+            //MainActivity.flist.get(i).dura = 60;
             focusList.add(MainActivity.flist.get(i));
-            System.out.print("ffl:"+MainActivity.flist.get(i).startHour + ":"+MainActivity.flist.get(i).startMinute+MainActivity.flist.get(i).dura);
+            System.out.print("ffl:"+MainActivity.flist.get(i).startHour + ":"+MainActivity.flist.get(i).startMinute+" dura:" + MainActivity.flist.get(i).dura);
             totalMin = totalMin + MainActivity.flist.get(i).dura;
         }
        // focusList.add(MainActivity.flist.get(0));
@@ -174,7 +194,7 @@ public class ShowReport extends AppCompatActivity implements
         //卡片一：今日专注次数
         focusTimesText = findViewById(R.id.focusTimesText);
         String reportFoucsTimesStr1 = " 专注次数：\n\n\n";
-        String reportFocusTimesStr2 = " 3";//从服务器端获取数据，填在这里
+        String reportFocusTimesStr2 = " "+String.valueOf(focusList.size());//" 3";//从服务器端获取数据，填在这里
         String reportFocusTimesStr3 = "次";
         Spannable reportFoucsTimesStr = new SpannableString(reportFoucsTimesStr1+reportFocusTimesStr2+reportFocusTimesStr3);
         reportFoucsTimesStr.setSpan(new AbsoluteSizeSpan(80),reportFoucsTimesStr1.length(),reportFoucsTimesStr1.length()+reportFocusTimesStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
@@ -184,7 +204,7 @@ public class ShowReport extends AppCompatActivity implements
         //卡片二：今日打断次数
         interruptTimesText = findViewById(R.id.interruptTimesText);
         String reportInterruptTimesStr1 = " 打断次数： \n\n\n";
-        String reportInterruptTimesStr2 = " 5";//从服务器端获取数据，填在这里
+        String reportInterruptTimesStr2 = " 0";//从服务器端获取数据，填在这里
         String reportInterruptTimesStr3 = "次";
         Spannable reportInterruptTimesStr = new SpannableString(reportInterruptTimesStr1+reportInterruptTimesStr2+reportInterruptTimesStr3);
         reportInterruptTimesStr.setSpan(new AbsoluteSizeSpan(80),reportInterruptTimesStr1.length(),reportInterruptTimesStr1.length()+reportInterruptTimesStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
@@ -194,7 +214,7 @@ public class ShowReport extends AppCompatActivity implements
         //卡片三：连续专注天数
         continuousFocusDaysText = findViewById(R.id.continuousFocusDaysText);
         String continuousFocusDaysStr1 = " 连续专注天数： \n\n\n";
-        String continuousFocusDaysStr2 = " 3";//从服务器端获取数据，填在这里
+        String continuousFocusDaysStr2 = " 1";//从服务器端获取数据，填在这里
         String continuousFocusDaysStr3 = "天";
         Spannable continuousFocusDaysStr = new SpannableString(continuousFocusDaysStr1+continuousFocusDaysStr2+continuousFocusDaysStr3);
         continuousFocusDaysStr.setSpan(new AbsoluteSizeSpan(80),continuousFocusDaysStr1.length(),continuousFocusDaysStr1.length()+continuousFocusDaysStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
@@ -277,27 +297,27 @@ public class ShowReport extends AppCompatActivity implements
 
         // *假设取到的新数*
         int newFocusTime = 78;
-        List<Focus> newFocusList = new ArrayList<>();
-        Focus f1 = new Focus();
-        f1.startHour = 15;
-        f1.startMinute = 30;
-        f1.dura = 10;
-        Focus f2 = new Focus();
-        f2.startHour = 13;
-        f2.startMinute = 30;
-        f2.dura = 20;
-        Focus f3 = new Focus();
-        f3.startHour = 14;
-        f3.startMinute = 40;
-        f3.dura = 30;
-        Focus f4 = new Focus();
-        f4.startHour = 16;
-        f4.startMinute = 50;
-        f4.dura = 40;
-        newFocusList.add(f1);
-        newFocusList.add(f2);
-        newFocusList.add(f3);
-        newFocusList.add(f4);
+        final List<Focus> newFocusList = new ArrayList<>();
+//        Focus f1 = new Focus();
+//        f1.startHour = 15;
+//        f1.startMinute = 30;
+//        f1.dura = 10;
+//        Focus f2 = new Focus();
+//        f2.startHour = 13;
+//        f2.startMinute = 30;
+//        f2.dura = 20;
+//        Focus f3 = new Focus();
+//        f3.startHour = 14;
+//        f3.startMinute = 40;
+//        f3.dura = 30;
+//        Focus f4 = new Focus();
+//        f4.startHour = 16;
+//        f4.startMinute = 50;
+//        f4.dura = 40;
+//        newFocusList.add(f1);
+//        newFocusList.add(f2);
+//        newFocusList.add(f3);
+//        newFocusList.add(f4);
 
         int newFocusTimes = 12;
         int newInterruptTimes = 20;
@@ -305,6 +325,44 @@ public class ShowReport extends AppCompatActivity implements
 
 
         //*
+
+        //*尝试真实取数*
+        new Thread() {
+            public void run() {
+                try {
+                    String path = "http://49.232.5.236:8080/test/focusByDay?user=wangyihao&date=2019-10-31";
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code = conn.getResponseCode();
+                    if (code == 200) {
+                        InputStream is = conn.getInputStream();
+                        String result = StreamTools.readInputStream(is);
+                        JSONArray demo = new JSONArray(result);
+                        for(int i = 0;i < demo.length();i++)
+                        {
+                            JSONObject item = (JSONObject) demo.get(i);
+                            String beginTime = item.getString("begin");
+                            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                            Date date = format.parse(beginTime);
+                            Focus f = new Focus();
+                            f.startHour = date.getHours();
+                            f.startMinute = date.getMinutes();
+                            f.dura =(int) Double.parseDouble(item.getString("time"));
+                            newFocusList.add(f);
+                        }
+                        //JSONObject demoJson = new JSONObject(result);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                    //System.out.println();
+
+                }
+            }
+        }.start();
+        //
 
 
 
