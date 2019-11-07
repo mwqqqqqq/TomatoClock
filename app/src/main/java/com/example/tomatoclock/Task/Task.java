@@ -7,7 +7,7 @@ public class Task {
 
     public Task(int id, String ddl, String infor){
         this.id = id;
-        this.ddl = ddl;
+        this.ddl = ddl.substring(0, ddl.length() < 10 ? ddl.length(): 10);
         this.infor = infor;
     }
 
@@ -25,5 +25,9 @@ public class Task {
     }
     public void updateInfor(String newInfor){
         infor = newInfor;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
