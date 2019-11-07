@@ -45,7 +45,7 @@ public class RegisterActivity extends Activity implements OnCheckedChangeListene
                     startActivity(intent);
                     break;
                 case ERROR:
-                    Toast.makeText(RegisterActivity.this,"登录失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this,(String)msg.obj, Toast.LENGTH_LONG).show();
                     break;
             }
         };
@@ -89,8 +89,20 @@ public class RegisterActivity extends Activity implements OnCheckedChangeListene
             Toast.makeText(this,"用户名不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
+        if(user.length()>30){
+            Toast.makeText(this,"用户名长度超过限制", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(name.length()>11){
+            Toast.makeText(this,"姓名长度超过限制", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(TextUtils.isEmpty(pwd)){
             Toast.makeText(this,"密码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(pwd.length()>11){
+            Toast.makeText(this,"密码长度超过限制", Toast.LENGTH_SHORT).show();
             return;
         }
         if(TextUtils.equals(pwd, apwd)==false){
@@ -125,10 +137,16 @@ public class RegisterActivity extends Activity implements OnCheckedChangeListene
                             msg.what=SUCCESS;
                             msg.obj=demoJson.getString("message");
                             handler.sendMessage(msg);
+                        }else{
+                            Message msg=Message.obtain();
+                            msg.what=ERROR;
+                            msg.obj=demoJson.getString("message");
+                            handler.sendMessage(msg);
                         }
                     }else{
                         Message msg=Message.obtain();
                         msg.what=ERROR;
+                        msg.obj="电波无法到达呦";
                         handler.sendMessage(msg);
                     }
                 }catch(Exception e){

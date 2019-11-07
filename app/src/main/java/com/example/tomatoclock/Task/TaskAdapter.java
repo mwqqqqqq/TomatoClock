@@ -60,11 +60,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                             switch (item.getItemId()) {
                                 case R.id.taskEditItem:
                                     pos = taskAdapter.taskList.indexOf(task);
-                                    taskAdapter.tasksActivity.editTask(pos, task.getInfor());
+                                    taskAdapter.tasksActivity.TryEditTaskInfor(pos, task.getInfor());
                                     break;
                                 case R.id.taskDeleteItem:
                                     pos = taskAdapter.taskList.indexOf(task);
-                                    taskAdapter.removeTask(pos);
+                                    taskAdapter.tasksActivity.TryRemoveTask(pos);
                                     break;
                                 case R.id.taskBeginItem:
                                     break;
@@ -86,10 +86,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                             String monthStr = temp < 10 ? "0" + temp : "" + temp;
                             temp = dayOfMonth;
                             String dayStr = temp < 10 ? "0" + temp : "" + temp;
-                            task.updateDdl(year + "-" + monthStr + "-" + dayStr);
-                            taskAdapter.notifyItemChanged(taskAdapter.taskList.indexOf(task));
+                            int pos = taskAdapter.taskList.indexOf(task);
+                            taskAdapter.tasksActivity.TryEditTaskDdl(pos, year + "-" + monthStr + "-" + dayStr);
                         }
-                    }, 2019, 11, 1).show();
+                    }, 2019, 11, 10).show();
                 }
             });
         }
@@ -120,10 +120,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return taskList.size();
     }
 
-    private void removeTask(int taskPosition) {
-        taskList.remove(taskPosition);
-        notifyItemRemoved(taskPosition);
-    }
     public void addData(Task task) {
         taskList.add(task);
         notifyItemInserted(taskList.indexOf(task));

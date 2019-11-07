@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.example.tomatoclock.Task.TasksActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -12,26 +11,24 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Calendar;
 import android.os.SystemClock;
 import android.view.View;
-
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-
 import android.view.MenuItem;
-
 import com.google.android.material.navigation.NavigationView;
-
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.text.format.Time;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 import com.example.tomatoclock.report.Focus;
 
 public class MainActivity extends AppCompatActivity
@@ -49,7 +46,6 @@ public class MainActivity extends AppCompatActivity
     // 当前应用的背景图片ID，闹铃声ID
     public static int Current_BackImg = - 1;
     public static int Current_Alarm = - 1;
-    public Calendar calendar = Calendar.getInstance();
     private int startTime = 0;
 
     @Override
@@ -97,10 +93,11 @@ public class MainActivity extends AppCompatActivity
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 // 开始记时
                 chronometer.start();
-                ff.startHour = calendar.get(Calendar.HOUR_OF_DAY);
-                ff.startMinute = calendar.get(Calendar.MINUTE);
-            }
-        });
+                Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+8"));
+                ff.startHour = cal.get(Calendar.HOUR_OF_DAY);
+                ff.startMinute = cal.get(Calendar.MINUTE);
+                }
+            });
 
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +124,7 @@ public class MainActivity extends AppCompatActivity
                         if (SystemClock.elapsedRealtime()
                                 - chronometer.getBase() > startTime * 1000) {
                             chronometer.stop();
-                            ff.dura = startTime * 1000;
+                            ff.dura = startTime;
                             flist.add(ff);
                             // 给用户提示
                             showDialog();
@@ -191,6 +188,8 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(this, TasksActivity.class);
+            String userName = this.getIntent().getStringExtra("用户名");
+            intent.putExtra("userName", userName);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(this, ShowReport.class);
