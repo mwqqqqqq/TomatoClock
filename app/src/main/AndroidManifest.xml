@@ -13,17 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Coin"></activity>
-        <activity android:name=".Task.TasksActivity"></activity>
-        <activity android:name=".Task.TaskEditActivity"></activity>
-        <activity android:name=".Task.TaskNewActivity"></activity>
-        <activity android:name=".report.ShowReport"
+        <activity android:name=".report.AllFocusRecords"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Coin" />
+        <activity android:name=".Task.TasksActivity" />
+        <activity android:name=".Task.TaskEditActivity" />
+        <activity android:name=".Task.TaskNewActivity" />
+        <activity
+            android:name=".report.ShowReport"
             android:label="Report"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

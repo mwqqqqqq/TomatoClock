@@ -73,6 +73,7 @@ public class ShowReport extends AppCompatActivity implements
     TextView continuousFocusDaysText;
     TextView focusRecordTitle;
 
+
     RecyclerView focusRecords;
 
 
@@ -88,6 +89,11 @@ public class ShowReport extends AppCompatActivity implements
         String time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND);
         return date + " " + time;
     }
+    public void showAllFocusRecords(View view)
+    {
+        Intent intent=new Intent(ShowReport.this,AllFocusRecords.class);
+        startActivity(intent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +105,7 @@ public class ShowReport extends AppCompatActivity implements
 
         //adding
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.report);
 
         setSupportActionBar(toolbar);
         if(toolbar == null)
