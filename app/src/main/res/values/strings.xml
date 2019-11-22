@@ -36,4 +36,8 @@
     <string name="byDay">按日</string>
     <string name="byWeek">按周</string>
     <string name="byMonth">按月</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_show_all_focus_records">所有专注记录</string>
 </resources>

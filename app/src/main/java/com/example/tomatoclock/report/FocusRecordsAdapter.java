@@ -34,7 +34,9 @@ public class FocusRecordsAdapter extends RecyclerView.Adapter<FocusRecordsAdapte
 
     public FocusRecordsAdapter(List<Focus> focusRecords)
     {
+
         mFocusRecords = focusRecords;
+        System.out.println("mFocusRecords size = "+mFocusRecords.size());
     }
 
     @Override
@@ -50,7 +52,16 @@ public class FocusRecordsAdapter extends RecyclerView.Adapter<FocusRecordsAdapte
     {
         Focus focus = mFocusRecords.get(position);
         holder.focusRecordsImage.setImageResource(R.drawable.focusimage_clock);
-        String focusRecordStr1 = focus.startHour+":"+focus.startMinute+"\n";
+        String strFocusStartHour = String.valueOf(focus.startHour);
+        String strFocusStartMinute = String.valueOf(focus.startMinute);
+        String strDura = String.valueOf(focus.dura);
+        if(focus.startHour < 10)
+            strFocusStartHour = "0" + strFocusStartHour;
+        if(focus.startMinute < 10)
+            strFocusStartMinute = "0" + strFocusStartMinute;
+
+
+        String focusRecordStr1 = strFocusStartHour+":"+strFocusStartMinute+"\n";
         String focusRecordStr2 = focus.dura+"分钟";
         Spannable focusRecordStr = new SpannableString(focusRecordStr1+focusRecordStr2);
         focusRecordStr.setSpan(new ForegroundColorSpan(Color.BLACK),0,focusRecordStr1.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);

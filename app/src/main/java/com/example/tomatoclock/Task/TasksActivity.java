@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 public class TasksActivity extends AppCompatActivity {
     private List<Task> taskList = new ArrayList<>();
-    private RecyclerView taskRecylerView;
+    private RecyclerView taskRecylerView_new;
     private TaskAdapter taskAdapter;
 
     private String userName;
@@ -48,9 +48,9 @@ public class TasksActivity extends AppCompatActivity {
     }
 
     private void initTasks() {
-        taskRecylerView = (RecyclerView) findViewById(R.id.recyclerViewOfTasks);
+        taskRecylerView_new = (RecyclerView) findViewById(R.id.recyclerViewOfTasks_new);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        taskRecylerView.setLayoutManager(layoutManager);
+        taskRecylerView_new.setLayoutManager(layoutManager);
         userName = this.getIntent().getStringExtra("userName");
 
         Thread thread = new Thread(){
@@ -91,7 +91,26 @@ public class TasksActivity extends AppCompatActivity {
         }
 
         taskAdapter = new TaskAdapter(this, taskList);
-        taskRecylerView.setAdapter(taskAdapter);
+        taskRecylerView_new.setAdapter(taskAdapter);
+    }
+
+    public void fold_new_tasks(View view){
+        System.out.println("try fold new tasks");
+        android.view.ViewGroup.LayoutParams params = taskRecylerView_new.getLayoutParams();
+        if(params.height == -2)
+            params.height = 0;
+        else params.height = -2;
+        taskRecylerView_new.setLayoutParams(params);
+    }
+
+    public void fold_finished_tasks(View view){
+        return;
+//        System.out.println("try fold new tasks");
+//        android.view.ViewGroup.LayoutParams params = taskRecylerView_new.getLayoutParams();
+//        if(params.height == -2)
+//            params.height = 0;
+//        else params.height = -2;
+//        taskRecylerView_new.setLayoutParams(params);
     }
 
     public void TryEditTaskDdl(int pos, String ddl){

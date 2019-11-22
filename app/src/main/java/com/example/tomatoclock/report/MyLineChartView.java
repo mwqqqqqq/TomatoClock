@@ -462,4 +462,5 @@ public class MyLineChartView extends View {
         paint.getTextBounds(text, 0, text.length(), rect);
         return rect.height();
     }
+
 }
