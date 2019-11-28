@@ -436,6 +436,7 @@ public class MyLineChartView extends View {
 
     public void setFocusList(List<Focus> focusList)
     {
+        this.invalidate();
         this.focusList = focusList;
     }
 
