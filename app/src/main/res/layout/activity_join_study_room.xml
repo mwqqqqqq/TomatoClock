@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你目前还没有加入一个自习室！"
+        android:textSize="24sp"
+        android:translationX="45dp"
+        android:translationY="100dp" />
+
+    <Button
+        android:id="@+id/try_join_study_room"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:onClick="tryJoinStudyRoom"
+        android:text="加入"
+        android:textSize="24sp"
+        android:translationX="120dp"
+        android:translationY="150dp" />
+
+    <Button
+        android:id="@+id/try_create_study_room"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:onClick="tryCreateStudyRoom"
+        android:text="创建"
+        android:textSize="24sp"
+        android:translationX="120dp"
+        android:translationY="180dp" />
+</LinearLayout>
