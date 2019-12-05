@@ -17,8 +17,8 @@ import com.example.tomatoclock.R;
 
 import java.util.List;
 
-public class FocusRecordsAdapter extends RecyclerView.Adapter<FocusRecordsAdapter.ViewHolder> {
-    private List<Focus> mFocusRecords;
+public class FocusWIthDateRecordsAdapter extends RecyclerView.Adapter<FocusWIthDateRecordsAdapter.ViewHolder> {
+    private List<FocusWIthDate> mFocusRecords;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView focusRecordsImage;
@@ -32,7 +32,7 @@ public class FocusRecordsAdapter extends RecyclerView.Adapter<FocusRecordsAdapte
         }
     }
 
-    public FocusRecordsAdapter(List<Focus> focusRecords)
+    public FocusWIthDateRecordsAdapter(List<FocusWIthDate> focusRecords)
     {
 
         mFocusRecords = focusRecords;

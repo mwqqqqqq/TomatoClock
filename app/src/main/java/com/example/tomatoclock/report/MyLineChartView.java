@@ -436,6 +436,7 @@ public class MyLineChartView extends View {
 
     public void setFocusList(List<Focus> focusList)
     {
+        this.invalidate();
         this.focusList = focusList;
     }
 
@@ -462,4 +463,5 @@ public class MyLineChartView extends View {
         paint.getTextBounds(text, 0, text.length(), rect);
         return rect.height();
     }
+
 }
