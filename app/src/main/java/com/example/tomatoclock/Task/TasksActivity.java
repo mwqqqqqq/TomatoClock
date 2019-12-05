@@ -132,6 +132,12 @@ public class TasksActivity extends AppCompatActivity {
     public void TryRemoveTask(int pos){
         DoRemoveTask(pos);
     }
+
+    public void TryBeginTask(int pos){
+        Task task = taskList.get(pos);
+        DbBeginTask(task.getId());
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -233,6 +239,7 @@ public class TasksActivity extends AppCompatActivity {
             public void run(){
                 try{
                     String path="http://49.232.5.236:8080/test/DDLAdd?ddl_name=2&ddl_desc="+newInfor+"&ddl_time0=01:01:01&ddl_time1=01:01:01&ddl_date="+newDdl+" 20:20:20&user_name="+userName;
+                    System.out.println(path);
                     URL url=new URL(path);
                     HttpURLConnection conn=(HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
@@ -254,4 +261,26 @@ public class TasksActivity extends AppCompatActivity {
         thread.start();
     }
 
+    private void DbBeginTask(final int id){
+        new Thread(){
+            public void run(){
+                try{
+                    String path="http://49.232.5.236:8080/test/UserChange?user_name=" + userName + "&ddl_id="+id;
+                    System.out.println(path);
+                    URL url=new URL(path);
+                    HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent","Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code=conn.getResponseCode();
+                    if(code==200){
+                        InputStream is=conn.getInputStream();
+                        String result= StreamTools.readInputStream(is);
+                        System.out.println(result);
+                    }
+                }catch(Exception e){
+                    return;
+                }
+            }
+        }.start();
+    }
 }

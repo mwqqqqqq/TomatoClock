@@ -17,6 +17,8 @@
         <activity android:name=".Task.TasksActivity"></activity>
         <activity android:name=".Task.TaskEditActivity"></activity>
         <activity android:name=".Task.TaskNewActivity"></activity>
+        <activity android:name=".StudyRoom.StudyRoomActivity"></activity>
+        <activity android:name=".StudyRoom.JoinStudyRoomActivity"></activity>
         <activity android:name=".report.ShowReport"
             android:label="Report"
             android:theme="@style/AppTheme.NoActionBar"/>
