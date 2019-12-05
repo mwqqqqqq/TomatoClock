@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import com.example.tomatoclock.Task.TasksActivity;
+import com.example.tomatoclock.StudyRoom.StudyRoomActivity;
+import com.example.tomatoclock.StudyRoom.JoinStudyRoomActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -226,4 +228,25 @@ public class MainActivity extends AppCompatActivity
             drawer.setBackgroundResource(R.mipmap.back4);
 
     }
+
+    public boolean hasStudyRoom(String user_name){
+        return false;
+    }
+    public void enterStudyRoom(View view){
+        String userName = this.getIntent().getStringExtra("用户名");
+
+        if(hasStudyRoom(userName)) {
+            //已经加入了自习室
+            Intent intent = new Intent(this, StudyRoomActivity.class);
+            intent.putExtra("userName", userName);
+            startActivity(intent);
+        }
+        else{
+            //没有加入自习室
+            Intent intent = new Intent(this, JoinStudyRoomActivity.class);
+            intent.putExtra("userName", userName);
+            startActivity(intent);
+        }
+    }
+
 }

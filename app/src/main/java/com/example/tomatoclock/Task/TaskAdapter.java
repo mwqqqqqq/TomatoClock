@@ -67,6 +67,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                                     taskAdapter.tasksActivity.TryRemoveTask(pos);
                                     break;
                                 case R.id.taskBeginItem:
+                                    pos = taskAdapter.taskList.indexOf(task);
+                                    taskAdapter.tasksActivity.TryBeginTask(pos);
                                     break;
                             }
                             return false;

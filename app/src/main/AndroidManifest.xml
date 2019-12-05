@@ -24,6 +24,8 @@
         <activity android:name=".Task.TasksActivity" />
         <activity android:name=".Task.TaskEditActivity" />
         <activity android:name=".Task.TaskNewActivity" />
+        <activity android:name=".StudyRoom.JoinStudyRoomActivity"/>
+        <activity android:name=".StudyRoom.StudyRoomActivity"/>
         <activity
             android:name=".report.ShowReport"
             android:label="Report"
