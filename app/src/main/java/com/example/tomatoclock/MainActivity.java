@@ -193,6 +193,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(this, ShowReport.class);
+            String userName = this.getIntent().getStringExtra("用户名");
+            intent.putExtra("userName", userName);
             startActivity(intent);
 
         } else if (id == R.id.nav_tools) {

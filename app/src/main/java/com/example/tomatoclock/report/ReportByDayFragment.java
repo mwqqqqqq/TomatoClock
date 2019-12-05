@@ -69,7 +69,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
     MyLineChartView chartView;
     List<String> xValues;   //x轴数据集合
     List<Integer> yValues;  //y轴数据集合
-    List<Focus> focusList;
+    List<Focus> focusList = new ArrayList<>();
 
     TextView reportTitle;
     TextView focusTodayText;
@@ -78,6 +78,8 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
     TextView interruptTimesText;
     TextView continuousFocusDaysText;
     TextView focusRecordTitle;
+
+    FocusRecordsAdapter fa = new FocusRecordsAdapter(focusList);
 
 
     RecyclerView focusRecords;
@@ -99,8 +101,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+
      * @return A new instance of fragment ReportByDayFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -163,14 +164,15 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         cal.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
         String dateStr = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
         String timeStr = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND);
-        userName = "boot";//TODO:获取当前的用户名
+
 
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_report_by_day, container, false);
+        userName = getArguments().getString("userName");//
         chartView = (MyLineChartView) root.findViewById(R.id.linechartview);
         xValues = new ArrayList<>();
         yValues = new ArrayList<>();
-        focusList = new ArrayList<>();
+        //focusList = new ArrayList<>();
         // xy轴集合自己添加数据，测试随便数据
         for(int i = 0;i < 5;i++)
             xValues.add(String.valueOf(i));
@@ -210,10 +212,17 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
             totalMin = totalMin + MainActivity.flist.get(i).dura;
         }
         //更新上方图表
+        focusRecords = root.findViewById(R.id.focusRecords);//外面加一层relativeLayout
+        LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
+        focusRecords.setLayoutManager(layoutManager);
+        focusRecords.setAdapter(fa);
         setFocusByDay(dateStr,userName);
+        //fa.notifyDataSetChanged();
+
+
         // focusList.add(MainActivity.flist.get(0));
-        while(!focusListFinish);
-        chartView.setFocusList(focusList);
+        //(!focusListFinish);
+        //chartView.setFocusList(focusList);
         //focusListFinish = false;
         //
 
@@ -277,7 +286,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         focusRecordTitle.setText(focusRecordTitleStr);
 
         //专注记录实现（cardView+RecycleView)https://blog.csdn.net/u014752325/article/details/51384727
-        focusRecords = root.findViewById(R.id.focusRecords);//外面加一层relativeLayout
+       // focusRecords = root.findViewById(R.id.focusRecords);//外面加一层relativeLayout
         //focusRecords.setMinimumHeight();
         //测试
         List<Focus> afocus = new ArrayList<>();
@@ -305,16 +314,17 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         }
         //更新专注详情列表：等待focusList不为空
         //TODO:bad Design
-        while(focusList.size() == 0 && !focusListFinish)
-            continue;
-        focusListFinish = false;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
-
-        focusRecords.setLayoutManager(layoutManager);
-        FocusRecordsAdapter fa = new FocusRecordsAdapter(focusList);
-        focusRecords.setAdapter(fa);
+        //while(focusList.size() == 0 && !focusListFinish)
+        //    continue;
+        //focusListFinish = false;
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
+//
+//        focusRecords.setLayoutManager(layoutManager);
+//        FocusRecordsAdapter fa = new FocusRecordsAdapter(focusList);
+//        focusRecords.setAdapter(fa);
         //
         //focusRecords.
+
 
 
         return root;
@@ -448,11 +458,14 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         String dateStr = this.year+"-"+this.month+"-"+this.day;
 
         setFocusByDay(dateStr,userName);
+        setFocusTime(dateStr,userName);
+        setFocusTimes(dateStr,userName);
         // focusList.add(MainActivity.flist.get(0));
 
-        while(!focusListFinish )
+        //while(!focusListFinish );
         chartView.setFocusList(focusList);
-        focusListFinish = false;
+
+        //focusListFinish = false;
         System.out.println(focusList.size());
         System.out.println(dateStr);
         chartView.invalidate();
@@ -678,7 +691,13 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
 
     void updateFocusByDay(List<Focus> newFocusList)
     {
+        chartView.invalidate();
         chartView.setFocusList(newFocusList);
+
+        //fa.notifyDataSetChanged();
+
+
+
     }
     void setFocusByDay(String date,String userName)
     {
@@ -713,16 +732,17 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
                             f.startMinute = date.getMinutes();
                             f.dura =(int) Double.parseDouble(item.getString("time"));
                             focusList.add(f);
-                            //updateFocusByDay(focusList);
+
                             System.out.println("Eren sss " + f.dura);
                         }
-                        focusListFinish = true;
+                        updateFocusByDay(focusList);
+                        //focusListFinish = true;
                         //JSONObject demoJson = new JSONObject(result);
                     }
-                    focusListFinish = true;
+                    //focusListFinish = true;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    focusListFinish = true;
+                    //focusListFinish = true;
                     System.out.println(e.getMessage());
 
                     //System.out.println();

@@ -41,6 +41,8 @@ public class ShowReport extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener
 {
     NoScrollViewPager mPager;
+    public String userName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class ShowReport extends AppCompatActivity implements
         toolbar.setTitle(R.string.report);
 
         setSupportActionBar(toolbar);
+        userName = this.getIntent().getStringExtra("userName");
+
         if(toolbar == null)
             System.out.println("null toolbar");
         // System.out.println("Local Time is " + getLocalDatetimeString("GMT+8"));
@@ -67,6 +71,11 @@ public class ShowReport extends AppCompatActivity implements
         //fragment适配
         ReportByDayFragment fragmentByDay = ReportByDayFragment.newInstance();
         ReportByWeekFragment fragmentByWeek = ReportByWeekFragment.newInstance();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("userName",userName);
+        fragmentByDay.setArguments(bundle);
+        fragmentByWeek.setArguments(bundle);
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(fragmentByDay);
         fragmentList.add(fragmentByWeek);
@@ -144,7 +153,10 @@ public class ShowReport extends AppCompatActivity implements
 //
 //    }
 
-
+    public String getUserName()
+    {
+        return userName;
+    }
 
 
 }
