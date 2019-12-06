@@ -17,7 +17,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tomatoclock.R;
+import com.example.tomatoclock.StreamTools;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.SimpleTimeZone;
@@ -28,7 +35,9 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
     String userName;
 
     View join_room_view;
+    Dialog join_dialog;
     View create_room_view;
+    Dialog create_dialog;
 
     Calendar calendar = Calendar.getInstance();
     int beginHour;
@@ -45,13 +54,14 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
     }
 
     public void tryJoinStudyRoom(View view){
-        Dialog dialog;
+        if(join_dialog != null)
+            join_dialog.dismiss();
         LayoutInflater inflater=LayoutInflater.from(this);
         join_room_view = inflater.inflate(R.layout.join_study_room,null);//引用自定义布局
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setView(join_room_view);
-        dialog=builder.create();
-        dialog.show();
+        join_dialog=builder.create();
+        join_dialog.show();
     }
 
     public void tryCreateStudyRoom(View view){
@@ -60,12 +70,13 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
         endHour = beginHour;
         endMinute = beginMinute;
 
-        Dialog dialog;
+        if(create_dialog != null)
+            create_dialog.dismiss();
         LayoutInflater inflater=LayoutInflater.from(this);
         create_room_view = inflater.inflate(R.layout.create_study_room,null);//引用自定义布局
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setView(create_room_view);
-        dialog=builder.create();
+        create_dialog=builder.create();
 
 
         final TextView beginTime = create_room_view.findViewById(R.id.create_study_room_begin_time);
@@ -107,7 +118,7 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
                 }, endHour, endMinute, true).show();
             }
         });
-        dialog.show();
+        create_dialog.show();
     }
 
     public void joinStudyRoom(View view) {
@@ -118,8 +129,96 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
             return;
         }
         int roomNum = Integer.parseInt(roomNumText.getText().toString());
+        boolean joinSuccess = doJoinStudyRoom(roomNum);
+        if(!joinSuccess){
+            showMessage("加入房间失败：房间号错误！");
+            return;
+        }
         System.out.println("join room " + roomNum);
         EnterStudyRoom();
+    }
+
+    public boolean doJoinStudyRoom(final int roomNum){
+        final int[] resultCode = {0};
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    String path = "http://49.232.5.236:8080/test/SRJoin?user=" + userName + "&room_id=" + roomNum;
+                    System.out.println(path);
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code = conn.getResponseCode();
+                    if (code == 200) {
+                        InputStream is = conn.getInputStream();
+                        String result = StreamTools.readInputStream(is);
+                        System.out.println(result);
+                        JSONObject jsonObject = new JSONObject(result);
+                        resultCode[0] = jsonObject.getInt("code");
+                    }
+                } catch (Exception e) {
+                    resultCode[0] = 0;
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return resultCode[0] == 1;
+    }
+
+    public boolean doCreateStudyRoom(final int roomNum, final String roomName){
+        final int nowDay = calendar.get(Calendar.DAY_OF_MONTH);
+        final int nowMonth = calendar.get(Calendar.MONTH) + 1;
+        final int nowYear = calendar.get(Calendar.YEAR);
+
+        final String startTime = nowYear+"-"+nowMonth+"-"+nowDay+" "+beginHour+":"+beginMinute+":00";
+        int durationHour;
+        int durationMinute;
+        if(endMinute >= beginMinute){
+            durationHour = endHour - beginHour;
+            durationMinute = endMinute - beginMinute;
+        }
+        else{
+            durationHour = endHour - beginHour - 1;
+            durationMinute = endMinute + 60 - beginMinute;
+        }
+        final String duration = durationHour+":"+durationMinute+":00";
+
+        final int[] resultCode = {0};
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    String path = "http://49.232.5.236:8080/test/SRAdd?room_id="+roomNum+"&start_time="+startTime+"&duration="+duration+"&name="+roomName+"&user="+userName;
+                    System.out.println(path);
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code = conn.getResponseCode();
+                    if (code == 200) {
+                        InputStream is = conn.getInputStream();
+                        String result = StreamTools.readInputStream(is);
+                        System.out.println(result);
+                        JSONObject jsonObject = new JSONObject(result);
+                        resultCode[0] = jsonObject.getInt("code");
+                    }
+                } catch (Exception e) {
+                    resultCode[0] = 0;
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return resultCode[0] == 1;
     }
 
     public void createStudyRoom(View view){
@@ -141,6 +240,11 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
         }
 
         int roomNum = Integer.parseInt(roomNumText.getText().toString());
+        boolean createSuccess = doCreateStudyRoom(roomNum, name_str);
+        if(!createSuccess){
+            showMessage("创建房间失败：房间号已存在！");
+            return;
+        }
         System.out.println("create room " + name_str + " " + roomNum + " " + beginHour + ":" + beginMinute + "-" + endHour + ":" + endMinute);
         EnterStudyRoom();
     }
@@ -149,6 +253,10 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
         Intent intent = new Intent(this, StudyRoomActivity.class);
         intent.putExtra("userName", userName);
         startActivity(intent);
+        if(join_dialog != null)
+            join_dialog.dismiss();
+        if(create_dialog != null)
+            create_dialog.dismiss();
         this.finish();
     }
 
