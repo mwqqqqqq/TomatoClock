@@ -4,12 +4,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.example.tomatoclock.Task.Task;
 import com.example.tomatoclock.Task.TasksActivity;
 import com.example.tomatoclock.StudyRoom.StudyRoomActivity;
 import com.example.tomatoclock.StudyRoom.JoinStudyRoomActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Calendar;
 import android.os.SystemClock;
 import android.view.View;
@@ -32,6 +38,9 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import com.example.tomatoclock.report.Focus;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -231,9 +240,39 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public boolean hasStudyRoom(String user_name){
-        return false;
+    public boolean hasStudyRoom(final String userName){
+        final int[] resultCode = {0};
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    String path = "http://49.232.5.236:8080/test/getRoom?user=" + userName;
+                    System.out.println(path);
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code = conn.getResponseCode();
+                    if (code == 200) {
+                        InputStream is = conn.getInputStream();
+                        String result = StreamTools.readInputStream(is);
+                        System.out.println(result);
+                        JSONObject jsonObject = new JSONObject(result);
+                        resultCode[0] = jsonObject.getInt("code");
+                    }
+                } catch (Exception e) {
+                    resultCode[0] = 0;
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return resultCode[0] == 1;
     }
+
     public void enterStudyRoom(View view){
         String userName = this.getIntent().getStringExtra("用户名");
 
