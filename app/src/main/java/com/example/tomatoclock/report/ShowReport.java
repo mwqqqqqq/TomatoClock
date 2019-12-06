@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 
 
 import com.example.tomatoclock.Coin;
+import com.example.tomatoclock.MainActivity;
 import com.example.tomatoclock.R;
 import com.example.tomatoclock.StreamTools;
 import com.example.tomatoclock.Task.TasksActivity;
@@ -101,9 +102,16 @@ public class ShowReport extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+            Intent intent = new Intent(this, MainActivity.class);
+            String userName = this.getIntent().getStringExtra("userName");
+            intent.putExtra("userName", userName);
+            intent.putExtra("用户名", userName);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(this, TasksActivity.class);
+            String userName = this.getIntent().getStringExtra("userName");
+            intent.putExtra("userName", userName);
+            intent.putExtra("用户名", userName);
             startActivity(intent);
             //System.out.println("aaa");
         } else if (id == R.id.nav_slideshow) {
@@ -113,6 +121,9 @@ public class ShowReport extends AppCompatActivity implements
 
         } else if (id == R.id.nav_tools) {
             Intent intent=new Intent(this, Coin.class);
+            String userName = this.getIntent().getStringExtra("userName");
+            intent.putExtra("userName", userName);
+            intent.putExtra("用户名", userName);
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {

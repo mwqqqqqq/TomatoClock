@@ -21,11 +21,22 @@
             android:name=".report.AllFocusRecords"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Coin" />
-        <activity android:name=".Task.TasksActivity" />
-        <activity android:name=".Task.TaskEditActivity" />
-        <activity android:name=".Task.TaskNewActivity" />
-        <activity android:name=".StudyRoom.JoinStudyRoomActivity"/>
-        <activity android:name=".StudyRoom.StudyRoomActivity"/>
+        <activity
+            android:name=".Task.TasksActivity"
+            android:label="DDL"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Task.TaskEditActivity"
+            android:label="编辑任务"
+            />
+        <activity android:name=".Task.TaskNewActivity"
+            android:label="新建任务"
+            />
+        <activity android:name=".StudyRoom.JoinStudyRoomActivity"
+            android:label="加入自习室"
+            />
+        <activity android:name=".StudyRoom.StudyRoomActivity"
+            android:label="我的自习室"
+            />
         <activity
             android:name=".report.ShowReport"
             android:label="Report"
