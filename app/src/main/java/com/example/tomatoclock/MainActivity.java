@@ -49,11 +49,10 @@ public class MainActivity extends AppCompatActivity
 
     // 金币数，背景图片总数，背景图购买数组
     // 目前是本地初始化，后续从服务器上下载
-    public static int coins = 100;
+    public static int coins = 200;
     public static int BackImg_num = 5;
-    public static int[] BackImg = {0,1,0,0,0};
     public static int Alarm_num = 5;
-    public static int[] Alarm = {0,0,0,0,0};
+
     // 当前应用的背景图片ID，闹铃声ID
     public static int Current_BackImg = - 1;
     public static int Current_Alarm = - 1;
@@ -210,6 +209,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_tools) {
             Intent intent=new Intent(MainActivity.this,Coin.class);
+            String userName = this.getIntent().getStringExtra("用户名");
+            intent.putExtra("userName", userName);
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
