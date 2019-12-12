@@ -252,17 +252,17 @@ public class MyLineChartView extends View {
 //
 //
 //        canvas.drawPath(path, paintBlue);
+        if(focusList != null) {
+            for (int i = 0; i < focusList.size(); i++) {
+                System.out.println(i);
+                Path path = new Path();
+                double start = focusList.get(i).startHour + focusList.get(i).startMinute / 60.0;
+                double dura = focusList.get(i).dura / 60.0;
+                path.moveTo((float) (firstPointX + start * intervalX + paintBlue.getStrokeWidth() / 2), (float) (mHeight / 2.0));
 
-        for(int i = 0;i < focusList.size();i++)
-        {
-            System.out.println(i);
-            Path path = new Path();
-            double start = focusList.get(i).startHour + focusList.get(i).startMinute/60.0;
-            double dura = focusList.get(i).dura / 60.0;
-            path.moveTo((float)(firstPointX+ start * intervalX + paintBlue.getStrokeWidth()/2),(float)(mHeight/2.0));
-
-            path.lineTo((float)(firstPointX + (start+dura) * intervalX-paintBlue.getStrokeWidth()/2),(float)(mHeight/2.0));
-            canvas.drawPath(path, paintBlue);
+                path.lineTo((float) (firstPointX + (start + dura) * intervalX - paintBlue.getStrokeWidth() / 2), (float) (mHeight / 2.0));
+                canvas.drawPath(path, paintBlue);
+            }
         }
         //画第二条线
         //Path path2 = new Path();

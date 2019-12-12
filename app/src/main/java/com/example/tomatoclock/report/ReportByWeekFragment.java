@@ -68,6 +68,8 @@ public class ReportByWeekFragment extends Fragment {
 
     String userName;
 
+    TextView textViewDate;
+
     public ReportByWeekFragment() {
         // Required empty public constructor
     }
@@ -105,8 +107,16 @@ public class ReportByWeekFragment extends Fragment {
         cal.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
         String dateStr = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
         String timeStr = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND);
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - cal.get(Calendar.DAY_OF_WEEK));
+        String dateThisMondayStr = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
+        cal.add(Calendar.DATE, 6);
+        String dateThisSundayStr = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
+
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_report_by_week, container, false);
+        textViewDate = root.findViewById(R.id.textView13);
+        textViewDate.setText(dateThisMondayStr+"-"+dateThisSundayStr);
         userName = getArguments().getString("userName");
         chart =  root.findViewById(R.id.chart);
         //此处应该替换为去给定接口取数

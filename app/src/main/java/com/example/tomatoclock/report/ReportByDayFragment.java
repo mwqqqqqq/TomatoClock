@@ -69,7 +69,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
     MyLineChartView chartView;
     List<String> xValues;   //x轴数据集合
     List<Integer> yValues;  //y轴数据集合
-    List<Focus> focusList = new ArrayList<>();
+    List<Focus> focusList;
 
     TextView reportTitle;
     TextView focusTodayText;
@@ -78,8 +78,9 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
     TextView interruptTimesText;
     TextView continuousFocusDaysText;
     TextView focusRecordTitle;
+    TextView dayNow;
 
-    FocusRecordsAdapter fa = new FocusRecordsAdapter(focusList);
+    FocusRecordsAdapter fa;// = new FocusRecordsAdapter(focusList);
 
 
     RecyclerView focusRecords;
@@ -168,11 +169,16 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
 
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_report_by_day, container, false);
+        dayNow = root.findViewById(R.id.textView12);
+        Spannable dayNowStr = new SpannableString(dateStr);
+        //dayNowStr.setSpan(new AbsoluteSizeSpan(80),0,dateStr.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        dayNow.setText(dayNowStr);
         userName = getArguments().getString("userName");//
         chartView = (MyLineChartView) root.findViewById(R.id.linechartview);
         xValues = new ArrayList<>();
         yValues = new ArrayList<>();
-        //focusList = new ArrayList<>();
+        focusList = new ArrayList<>();
+
         // xy轴集合自己添加数据，测试随便数据
         for(int i = 0;i < 5;i++)
             xValues.add(String.valueOf(i));
@@ -202,19 +208,20 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
 //        focus2.dura = 45;
 //        focusList.add(focus2);
         int totalMin = 0;
-        for (int i = 0;i < MainActivity.flist.size();i++)
-        {
-            //MainActivity.flist.get(i).startHour=8;
-            //MainActivity.flist.get(i).startMinute=0;
-            //MainActivity.flist.get(i).dura = 60;
-            focusList.add(MainActivity.flist.get(i));
-            System.out.print("ffl:"+MainActivity.flist.get(i).startHour + ":"+MainActivity.flist.get(i).startMinute+" dura:" + MainActivity.flist.get(i).dura);
-            totalMin = totalMin + MainActivity.flist.get(i).dura;
-        }
+//        for (int i = 0;i < MainActivity.flist.size();i++)
+//        {
+//            //MainActivity.flist.get(i).startHour=8;
+//            //MainActivity.flist.get(i).startMinute=0;
+//            //MainActivity.flist.get(i).dura = 60;
+//            focusList.add(MainActivity.flist.get(i));
+//            System.out.print("ffl:"+MainActivity.flist.get(i).startHour + ":"+MainActivity.flist.get(i).startMinute+" dura:" + MainActivity.flist.get(i).dura);
+//            totalMin = totalMin + MainActivity.flist.get(i).dura;
+//        }
         //更新上方图表
         focusRecords = root.findViewById(R.id.focusRecords);//外面加一层relativeLayout
         LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
         focusRecords.setLayoutManager(layoutManager);
+        fa = new FocusRecordsAdapter(focusList);
         focusRecords.setAdapter(fa);
         setFocusByDay(dateStr,userName);
         //fa.notifyDataSetChanged();
@@ -351,6 +358,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
 //        }
 //    }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -448,6 +456,14 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
 
     }
 
+    void updateRecords(final int oldSize)
+    {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() { while(focusList.size()==oldSize);fa.notifyDataSetChanged();
+            }
+        });
+    }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {//暂定，所有的更新都写在这里，肯定不是好方案，但进度优先
@@ -457,9 +473,14 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
 
         String dateStr = this.year+"-"+this.month+"-"+this.day;
 
+        dayNow.setText(dateStr);
+        int oldListSize = focusList.size();
         setFocusByDay(dateStr,userName);
         setFocusTime(dateStr,userName);
         setFocusTimes(dateStr,userName);
+        updateRecords(oldListSize);
+
+        System.out.println("new FocusListSize = "+focusList.size());
         // focusList.add(MainActivity.flist.get(0));
 
         //while(!focusListFinish );
@@ -469,6 +490,8 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         System.out.println(focusList.size());
         System.out.println(dateStr);
         chartView.invalidate();
+
+
 
 //
 //        //根据日期取数
@@ -694,7 +717,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         chartView.invalidate();
         chartView.setFocusList(newFocusList);
 
-        //fa.notifyDataSetChanged();
+
 
 
 

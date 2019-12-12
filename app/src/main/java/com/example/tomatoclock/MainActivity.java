@@ -9,6 +9,7 @@ import com.example.tomatoclock.Task.Task;
 import com.example.tomatoclock.Task.TasksActivity;
 import com.example.tomatoclock.StudyRoom.StudyRoomActivity;
 import com.example.tomatoclock.StudyRoom.JoinStudyRoomActivity;
+import com.example.tomatoclock.rankList.RankListActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,6 +32,8 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.text.format.Time;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -82,6 +85,10 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+//        LinearLayout drawer_header = navigationView.findViewById(R.id.drawer_header);
+//        TextView userNameInfoText = drawer_header.findViewById(R.id.userNameInfo);
+//        userNameInfoText.setText(this.getIntent().getStringExtra("用户名"));
 
 
         //Timer Code
@@ -141,6 +148,7 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
                 });
+
     }
 
         protected void showDialog() {
@@ -207,7 +215,16 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("userName", userName);
             startActivity(intent);
 
-        } else if (id == R.id.nav_tools) {
+
+        }
+        else if (id == R.id.nav_slideshow2)
+        {
+            Intent intent = new Intent(this, RankListActivity.class);
+            String userName = this.getIntent().getStringExtra("用户名");
+            intent.putExtra("userName", userName);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_tools) {
             Intent intent=new Intent(MainActivity.this,Coin.class);
             String userName = this.getIntent().getStringExtra("用户名");
             intent.putExtra("userName", userName);
@@ -218,6 +235,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

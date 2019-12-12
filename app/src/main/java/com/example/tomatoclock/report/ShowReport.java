@@ -22,6 +22,7 @@ import com.example.tomatoclock.MainActivity;
 import com.example.tomatoclock.R;
 import com.example.tomatoclock.StreamTools;
 import com.example.tomatoclock.Task.TasksActivity;
+import com.example.tomatoclock.rankList.RankListActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -119,7 +120,14 @@ public class ShowReport extends AppCompatActivity implements
             Intent intent = new Intent(this, ShowReport.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_tools) {
+        } else if (id == R.id.nav_slideshow2) {
+            Intent intent = new Intent(this, RankListActivity.class);
+            String userName = this.getIntent().getStringExtra("userName");
+            intent.putExtra("userName", userName);
+            intent.putExtra("用户名", userName);
+            startActivity(intent);
+
+        }else if (id == R.id.nav_tools) {
             Intent intent=new Intent(this, Coin.class);
             String userName = this.getIntent().getStringExtra("userName");
             intent.putExtra("userName", userName);

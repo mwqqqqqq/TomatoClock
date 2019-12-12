@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".rankList.RankListActivity"></activity>
         <activity
             android:name=".report.ShowAllFocusRecords"
             android:label="@string/title_activity_show_all_focus_records"
