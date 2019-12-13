@@ -21,7 +21,10 @@
         <activity
             android:name=".report.AllFocusRecords"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Coin" />
+        <activity
+            android:name=".Coin"
+            android:label="商店"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Task.TasksActivity"
             android:label="DDL"
