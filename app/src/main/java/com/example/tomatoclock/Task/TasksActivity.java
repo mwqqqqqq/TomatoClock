@@ -23,6 +23,7 @@ import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +45,12 @@ public class TasksActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
     private List<Task> taskList = new ArrayList<>();
+    private List<Task> taskList_finished = new ArrayList<>();
+    private static List<Integer> task_id_finished_local = new ArrayList<>();
     private RecyclerView taskRecylerView_new;
+    private RecyclerView taskRecylerView_finished;
     private TaskAdapter taskAdapter;
+    private TaskAdapter taskAdapter_finished;
 
     private String userName;
     private final int EDITTASK = 1;
@@ -76,8 +81,14 @@ public class TasksActivity extends AppCompatActivity
     private void initTasks() {
         taskList = new ArrayList<>();
         taskRecylerView_new = (RecyclerView) findViewById(R.id.recyclerViewOfTasks_new);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        taskRecylerView_new.setLayoutManager(layoutManager);
+        LinearLayoutManager layoutManager_new = new LinearLayoutManager(this);
+        taskRecylerView_new.setLayoutManager(layoutManager_new);
+
+        taskList_finished = new ArrayList<>();
+        taskRecylerView_finished = (RecyclerView) findViewById(R.id.recyclerViewOfTasks_finished);
+        LinearLayoutManager layoutManager_finished = new LinearLayoutManager(this);
+        taskRecylerView_finished.setLayoutManager(layoutManager_finished);
+
         userName = this.getIntent().getStringExtra("userName");
 
         Thread thread = new Thread(){
@@ -102,7 +113,12 @@ public class TasksActivity extends AppCompatActivity
                             String ddl_desc = tempJson.getString("ddl_desc");
                             Task tempTask = new Task(ddl_id, ddl_date, ddl_desc);
                             System.out.println(ddl_desc);
-                            taskList.add(tempTask);
+                            if(TasksActivity.task_id_finished_local.contains(ddl_id)){
+                                taskList_finished.add(tempTask);
+                            }
+                            else {
+                                taskList.add(tempTask);
+                            }
                         }
                     }
                 }catch(Exception e){
@@ -119,6 +135,9 @@ public class TasksActivity extends AppCompatActivity
 
         taskAdapter = new TaskAdapter(this, taskList);
         taskRecylerView_new.setAdapter(taskAdapter);
+
+        taskAdapter_finished = new TaskAdapter(this, taskList_finished);
+        taskRecylerView_finished.setAdapter(taskAdapter_finished);
     }
 
     public void fold_new_tasks(View view){
@@ -131,23 +150,22 @@ public class TasksActivity extends AppCompatActivity
     }
 
     public void fold_finished_tasks(View view){
-        return;
-//        System.out.println("try fold new tasks");
-//        android.view.ViewGroup.LayoutParams params = taskRecylerView_new.getLayoutParams();
-//        if(params.height == -2)
-//            params.height = 0;
-//        else params.height = -2;
-//        taskRecylerView_new.setLayoutParams(params);
+        System.out.println("try fold finished tasks");
+        android.view.ViewGroup.LayoutParams params = taskRecylerView_finished.getLayoutParams();
+        if(params.height == -2)
+            params.height = 0;
+        else params.height = -2;
+        taskRecylerView_finished.setLayoutParams(params);
     }
 
-    public void TryEditTaskDdl(int pos, String ddl){
-        DoEditTaskDdl(pos, ddl);
+    public void TryEditTaskDdl(Task task, String DDL){
+        DoEditTaskDdl(task, DDL);
     }
 
-    public void TryEditTaskInfor(int pos, String infor){
+    public void TryEditTaskInfor(Task task){
         Intent intent = new Intent(TasksActivity.this, TaskEditActivity.class);
-        intent.putExtra("pos", pos);
-        intent.putExtra("infor", infor);
+        intent.putExtra("id", task.getId());
+        intent.putExtra("infor", task.getInfor());
         startActivityForResult(intent, EDITTASK);
     }
 
@@ -156,13 +174,26 @@ public class TasksActivity extends AppCompatActivity
         startActivityForResult(intent, NEWTASK);
     }
 
-    public void TryRemoveTask(int pos){
-        DoRemoveTask(pos);
+    public void TryRemoveTask(Task task){
+        DoRemoveTask(task);
     }
 
-    public void TryBeginTask(int pos){
-        Task task = taskList.get(pos);
-        DbBeginTask(task.getId());
+    public void TryBeginTask(Task task){
+        int pos = taskList_finished.indexOf(task);
+        int id = task.getId();
+        if(pos != -1) {
+            taskList_finished.remove(pos);
+            taskList.add(task);
+            int pos_new = taskList.indexOf(task);
+            taskAdapter.notifyItemInserted(pos_new);
+            taskAdapter_finished.notifyItemRemoved(pos);
+            DbStateTask(id, "new");
+        }
+        DbBeginTask(id);
+    }
+
+    public void TryStateTask(Task task){
+        DoStateTask(task);
     }
 
     @Override
@@ -171,9 +202,9 @@ public class TasksActivity extends AppCompatActivity
         switch (requestCode){
             case EDITTASK:
                 if(resultCode == RESULT_OK){
-                    int pos = data.getIntExtra("pos", 0);
+                    int id = data.getIntExtra("id", 0);
                     String newInfor = data.getStringExtra("infor");
-                    DoEditTaskInfor(pos, newInfor);
+                    DoEditTaskInfor(id, newInfor);
                 }
                 break;
             case NEWTASK:
@@ -187,17 +218,38 @@ public class TasksActivity extends AppCompatActivity
         }
     }
 
-    private void DoEditTaskInfor(int pos, String newInfor){
-        Task task = taskList.get(pos);
-        task.updateInfor(newInfor);
-        taskAdapter.notifyItemChanged(pos);
-        DbEditTask(task.getId(), task.getInfor(), task.getDdl());
+    private void DoEditTaskInfor(int id, String newInfor){
+        for(int i = 0; i < taskList.size(); i++) {
+            Task t = taskList.get(i);
+            if (t.getId() == id){
+                t.updateInfor(newInfor);
+                taskAdapter.notifyItemChanged(i);
+                DbEditTask(t.getId(), t.getInfor(), t.getDdl());
+                return;
+            }
+        }
+        for(int i = 0; i < taskList_finished.size(); i++) {
+            Task t = taskList_finished.get(i);
+            if (t.getId() == id){
+                t.updateInfor(newInfor);
+                taskAdapter_finished.notifyItemChanged(i);
+                DbEditTask(t.getId(), t.getInfor(), t.getDdl());
+                return;
+            }
+        }
     }
 
-    private void DoEditTaskDdl(int pos, String newDdl){
-        Task task = taskList.get(pos);
-        task.updateDdl(newDdl);
-        taskAdapter.notifyItemChanged(pos);
+    private void DoEditTaskDdl(Task task, String DDL){
+        task.updateDdl(DDL);
+        int pos = taskList.indexOf(task);
+        if(pos != -1) {
+            taskAdapter.notifyItemChanged(pos);
+        }
+        else {
+            pos = taskList_finished.indexOf(task);
+            taskAdapter_finished.notifyItemChanged(pos);
+        }
+
         DbEditTask(task.getId(), task.getInfor(), task.getDdl());
     }
 
@@ -209,12 +261,49 @@ public class TasksActivity extends AppCompatActivity
         DbNewTask(pos, infor, ddl);
     }
 
-    private void DoRemoveTask(int pos) {
-        Task task = taskList.get(pos);
+    private void DoRemoveTask(Task task) {
+        int pos = taskList.indexOf(task);
         int id = task.getId();
-        taskList.remove(pos);
-        taskAdapter.notifyItemRemoved(pos);
+        if(pos != -1) {
+            taskList.remove(pos);
+            taskAdapter.notifyItemRemoved(pos);
+        }
+        else {
+            pos = taskList_finished.indexOf(task);
+            taskAdapter_finished.notifyItemRemoved(pos);
+        }
         DbRemoveTask(id);
+    }
+
+    private void DoStateTask(Task task){
+        int id = task.getId();
+        int pos = taskList.indexOf(task);
+        if(pos != -1) {
+            taskList.remove(pos);
+            taskList_finished.add(task);
+            int pos_finished = taskList_finished.indexOf(task);
+            taskAdapter_finished.notifyItemInserted(pos_finished);
+            taskAdapter.notifyItemRemoved(pos);
+            DbStateTask(id, "finished");
+        }
+        else{
+            pos = taskList_finished.indexOf(task);
+            taskList_finished.remove(pos);
+            taskList.add(task);
+            int pos_new = taskList.indexOf(task);
+            taskAdapter.notifyItemInserted(pos_new);
+            taskAdapter_finished.notifyItemRemoved(pos);
+            DbStateTask(id, "new");
+        }
+    }
+
+    private void DbStateTask(int id, String new_state){
+        if(new_state.equals("finished")){
+            TasksActivity.task_id_finished_local.add(id);
+        }
+        else {
+            TasksActivity.task_id_finished_local.remove((Integer)id);
+        }
     }
 
     private void DbEditTask(final int id, final String newInfor, final String newDdl){

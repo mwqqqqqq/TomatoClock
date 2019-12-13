@@ -59,16 +59,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                             int pos;
                             switch (item.getItemId()) {
                                 case R.id.taskEditItem:
-                                    pos = taskAdapter.taskList.indexOf(task);
-                                    taskAdapter.tasksActivity.TryEditTaskInfor(pos, task.getInfor());
+                                    taskAdapter.tasksActivity.TryEditTaskInfor(task);
                                     break;
                                 case R.id.taskDeleteItem:
-                                    pos = taskAdapter.taskList.indexOf(task);
-                                    taskAdapter.tasksActivity.TryRemoveTask(pos);
+                                    taskAdapter.tasksActivity.TryRemoveTask(task);
                                     break;
                                 case R.id.taskBeginItem:
-                                    pos = taskAdapter.taskList.indexOf(task);
-                                    taskAdapter.tasksActivity.TryBeginTask(pos);
+                                    taskAdapter.tasksActivity.TryBeginTask(task);
+                                    break;
+                                case R.id.taskStateItem:
+                                    taskAdapter.tasksActivity.TryStateTask(task);
                                     break;
                             }
                             return false;
@@ -88,8 +88,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                             String monthStr = temp < 10 ? "0" + temp : "" + temp;
                             temp = dayOfMonth;
                             String dayStr = temp < 10 ? "0" + temp : "" + temp;
-                            int pos = taskAdapter.taskList.indexOf(task);
-                            taskAdapter.tasksActivity.TryEditTaskDdl(pos, year + "-" + monthStr + "-" + dayStr);
+                            taskAdapter.tasksActivity.TryEditTaskDdl(task, year + "-" + monthStr + "-" + dayStr);
                         }
                     }, 2019, 11, 10).show();
                 }

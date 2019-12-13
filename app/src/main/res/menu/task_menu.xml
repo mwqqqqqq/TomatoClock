@@ -9,5 +9,8 @@
         android:title="删除" />
     <item
         android:id="@+id/taskBeginItem"
-        android:title="设为进行中" />
+        android:title="设为进行中"/>
+    <item
+        android:id="@+id/taskStateItem"
+        android:title="完成" />
 </menu>
