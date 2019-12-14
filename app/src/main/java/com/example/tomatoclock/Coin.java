@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.tomatoclock.Task.Task;
 import com.example.tomatoclock.Task.TaskAdapter;
+import com.example.tomatoclock.Task.TasksActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -50,10 +51,10 @@ public class Coin extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_drawer_coin);
-        setContentView(R.layout.activity_coin);
+        setContentView(R.layout.activity_drawer_coin);
 
         ReadCoins();
-        /*
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -64,7 +65,7 @@ public class Coin extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        */
+
 
 
         CoinBalance = (TextView) findViewById(R.id.CoinBalance);
@@ -289,6 +290,11 @@ public class Coin extends AppCompatActivity
             intent.putExtra("userName", userName);
             intent.putExtra("用户名", userName);
             startActivity(intent);
+        } else if (id == R.id.nav_gallery) {
+            Intent intent = new Intent(this, TasksActivity.class);
+            String userName = this.getIntent().getStringExtra("用户名");
+            intent.putExtra("userName", userName);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(this, ShowReport.class);
             String userName = this.getIntent().getStringExtra("userName");
@@ -297,11 +303,7 @@ public class Coin extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_tools) {
-            Intent intent=new Intent(this, Coin.class);
-            String userName = this.getIntent().getStringExtra("userName");
-            intent.putExtra("userName", userName);
-            intent.putExtra("用户名", userName);
-            startActivity(intent);
+
 
         } else if (id == R.id.nav_share) {
 

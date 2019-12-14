@@ -11,7 +11,7 @@ import com.example.tomatoclock.R;
 
 public class TaskEditActivity extends AppCompatActivity {
     EditText taskInforText;
-    int taskPos;
+    int taskId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class TaskEditActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         taskInforText = (EditText) findViewById(R.id.taskEdit_editText);
         String taskinfor = intent.getStringExtra("infor");
-        taskPos = intent.getIntExtra("pos", 0);
+        taskId = intent.getIntExtra("id", 0);
         taskInforText.setText(taskinfor);
     }
 
@@ -33,7 +33,7 @@ public class TaskEditActivity extends AppCompatActivity {
     public void onSaveButtonClick(View view){
         Intent intent = new Intent();
         intent.putExtra("infor", taskInforText.getText().toString());
-        intent.putExtra("pos", taskPos);
+        intent.putExtra("id", taskId);
         setResult(RESULT_OK, intent);
         finish();
     }
