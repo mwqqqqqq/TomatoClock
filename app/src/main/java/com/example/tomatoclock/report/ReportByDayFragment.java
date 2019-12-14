@@ -275,14 +275,17 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         setInterruptTimes(dateStr,userName);
 
         //卡片三：连续专注天数，TODO:等后台
-        continuousFocusDaysText = root.findViewById(R.id.continuousFocusDaysText);
-        String continuousFocusDaysStr1 = " 连续专注天数： \n\n\n";
-        String continuousFocusDaysStr2 = " 1";//从服务器端获取数据，填在这里
-        String continuousFocusDaysStr3 = "天";
-        Spannable continuousFocusDaysStr = new SpannableString(continuousFocusDaysStr1+continuousFocusDaysStr2+continuousFocusDaysStr3);
-        continuousFocusDaysStr.setSpan(new AbsoluteSizeSpan(80),continuousFocusDaysStr1.length(),continuousFocusDaysStr1.length()+continuousFocusDaysStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        continuousFocusDaysText.setText(continuousFocusDaysStr);
-        continuousFocusDaysText.setBackgroundResource(R.drawable.text_view_border);
+        //url 示例：http://49.232.5.236:8080/test/continuousFocusDay?user=boot&date=2019-11-16
+//        continuousFocusDaysText = root.findViewById(R.id.continuousFocusDaysText);
+//        String continuousFocusDaysStr1 = " 连续专注天数： \n\n\n";
+//        String continuousFocusDaysStr2 = " 1";//从服务器端获取数据，填在这里
+//        String continuousFocusDaysStr3 = "天";
+//        Spannable continuousFocusDaysStr = new SpannableString(continuousFocusDaysStr1+continuousFocusDaysStr2+continuousFocusDaysStr3);
+//        continuousFocusDaysStr.setSpan(new AbsoluteSizeSpan(80),continuousFocusDaysStr1.length(),continuousFocusDaysStr1.length()+continuousFocusDaysStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//        continuousFocusDaysText.setText(continuousFocusDaysStr);
+//        continuousFocusDaysText.setBackgroundResource(R.drawable.text_view_border);
+        setContinuousDays(dateStr,userName);
+
 
         //专注记录标题
         focusRecordTitle = root.findViewById(R.id.focusRecordTitle);
@@ -698,6 +701,47 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
                         System.out.println("in SetFocusTimes");
                         focusTodayText = root.findViewById(R.id.focusTodayText);
                         updateInterruptTimes((int)interruptTImes);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                    //System.out.println();
+
+                }
+            }
+
+        }.start();
+        return ret;
+    }
+
+    int setContinuousDays(String date,String userName) {
+        System.out.println("in SetFocusTimes");
+        final String finalDate = date;
+        final String finalUserName = userName;
+        int ret = -1;
+        new Thread() {
+            public void run() {
+                try {
+                    String path = "http://49.232.5.236:8080/test/continuousFocusDay?user=" + finalUserName + "&date=" + finalDate;
+                    System.out.println(path);
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code = conn.getResponseCode();
+                    if (code == 200) {
+
+                        InputStream is = conn.getInputStream();
+
+                        String result = StreamTools.readInputStream(is);
+                        System.out.println("result is "+ result);
+                        //JSONObject item = new JSONObject(result);
+                        //double focusTimes = Double.parseDouble(result);
+                        int interruptTImes = Integer.parseInt(result);
+                        System.out.println("in SetFocusTimes");
+                        focusTodayText = root.findViewById(R.id.focusTodayText);
+                        updateContinuousDays((int)interruptTImes);
 
                     }
                 } catch (Exception e) {
