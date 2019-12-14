@@ -116,7 +116,7 @@ public class ReportByWeekFragment extends Fragment {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_report_by_week, container, false);
         textViewDate = root.findViewById(R.id.textView13);
-        textViewDate.setText(dateThisMondayStr+"-"+dateThisSundayStr);
+        textViewDate.setText(dateThisMondayStr+" To "+dateThisSundayStr);
         userName = getArguments().getString("userName");
         chart =  root.findViewById(R.id.chart);
         //此处应该替换为去给定接口取数
