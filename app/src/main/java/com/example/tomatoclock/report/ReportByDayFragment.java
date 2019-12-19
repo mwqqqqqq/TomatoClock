@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
@@ -25,14 +23,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.tomatoclock.MainActivity;
 import com.example.tomatoclock.R;
 import com.example.tomatoclock.StreamTools;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -174,6 +169,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         //dayNowStr.setSpan(new AbsoluteSizeSpan(80),0,dateStr.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         dayNow.setText(dayNowStr);
         userName = getArguments().getString("userName");//
+        System.out.println("userName is " + userName);
         chartView = (MyLineChartView) root.findViewById(R.id.linechartview);
         xValues = new ArrayList<>();
         yValues = new ArrayList<>();
@@ -481,6 +477,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         setFocusByDay(dateStr,userName);
         setFocusTime(dateStr,userName);
         setFocusTimes(dateStr,userName);
+        setContinuousDays(dateStr,userName);
         updateRecords(oldListSize);
 
         System.out.println("new FocusListSize = "+focusList.size());
