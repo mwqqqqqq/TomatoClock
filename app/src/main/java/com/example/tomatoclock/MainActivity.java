@@ -3,6 +3,7 @@ package com.example.tomatoclock;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import com.example.tomatoclock.Task.Task;
 import com.example.tomatoclock.Task.TasksActivity;
@@ -95,8 +96,15 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        // 读取当前账户对应的背景图片ID
         ReadCoins();
-
+        // 为背景图片下设置时间数能看清
+        EditText edt = (EditText) findViewById(R.id.edt_settime);
+        edt.setBackgroundColor(Color.WHITE);
+        TextView stt1 = (TextView) findViewById(R.id.SetTimeText1);
+        stt1.setBackgroundColor(Color.WHITE);
+        TextView stt2 = (TextView) findViewById(R.id.SetTimeText2);
+        stt2.setBackgroundColor(Color.WHITE);
 
 //        LinearLayout drawer_header = navigationView.findViewById(R.id.drawer_header);
 //        TextView userNameInfoText = drawer_header.findViewById(R.id.userNameInfo);
