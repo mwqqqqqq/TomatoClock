@@ -7,7 +7,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,20 +17,17 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.TextAppearanceSpan;
 import android.view.MenuItem;
 import android.widget.TextView;
-
 import com.example.tomatoclock.Coin;
 import com.example.tomatoclock.MainActivity;
 import com.example.tomatoclock.R;
 import com.example.tomatoclock.Task.TasksActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.navigation.NavigationView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class RankListActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener{
-
 
     RecyclerView rankListFocusTime;
     TextView rankUserFocusTime;
