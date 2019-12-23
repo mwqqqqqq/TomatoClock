@@ -174,6 +174,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         //dayNowStr.setSpan(new AbsoluteSizeSpan(80),0,dateStr.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         dayNow.setText(dayNowStr);
         userName = getArguments().getString("userName");//
+        System.out.println("userName is " + userName);
         chartView = (MyLineChartView) root.findViewById(R.id.linechartview);
         xValues = new ArrayList<>();
         yValues = new ArrayList<>();
@@ -481,6 +482,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         setFocusByDay(dateStr,userName);
         setFocusTime(dateStr,userName);
         setFocusTimes(dateStr,userName);
+        setContinuousDays(dateStr,userName);
         updateRecords(oldListSize);
 
         System.out.println("new FocusListSize = "+focusList.size());

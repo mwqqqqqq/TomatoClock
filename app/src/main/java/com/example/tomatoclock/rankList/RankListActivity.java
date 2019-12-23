@@ -15,6 +15,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.TextAppearanceSpan;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -67,16 +68,21 @@ public class RankListActivity extends AppCompatActivity implements
         FocusTimeRank fr = new FocusTimeRank();
         fr.focusTime = 7200;
         fr.rank = 1;
-        fr.userName = "Eren";
+        fr.userName = "Mikasa";
         rankList.add(fr);
         FocusTimeRank fr2 = new FocusTimeRank();
         fr2.focusTime = 3600;
         fr2.rank = 2;
-        fr2.userName = "Jean";
+        fr2.userName = "Reiner";
         rankList.add(fr2);
         FocusTimeRankListAdapter fa = new FocusTimeRankListAdapter(rankList);
         rankListFocusTime.setAdapter(fa);
 
+
+        TextView rankListUpdateTime = findViewById(R.id.textView10);
+        String rankListUpdateTimeStr1 = "* 排行数据每日12点更新";
+        Spannable rankListUpdateTimeStr = new SpannableString(rankListUpdateTimeStr1);
+        rankListUpdateTime.setText(rankListUpdateTimeStr);
 
         rankUserFocusTime = findViewById(R.id.textView9);
         String focusTodayTextStr1 = "专注时长排名:\n";
@@ -94,15 +100,25 @@ public class RankListActivity extends AppCompatActivity implements
         rankListFocusDegree.setLayoutManager(layoutManager2);
         List<FocusTimeRank> rankList2 = new ArrayList<>();
         FocusTimeRank frrr = new FocusTimeRank();
-        frrr.userName = "Eren";
+        frrr.userName = "Mikasa";
         frrr.focusTime = 27.0;
         frrr.rank = 1;
         rankList2.add(frrr);
         FocusTimeRank frrr2 = new FocusTimeRank();
-        frrr2.userName = "Jean";
+        frrr2.userName = "Reiner ";
         frrr2.focusTime = 19.0;
         frrr2.rank = 2;
         rankList2.add(frrr2);
+        FocusTimeRank frrr3 = new FocusTimeRank();
+        frrr3.userName = "Bertolt";
+        frrr3.focusTime = 18.0;
+        frrr3.rank = 3;
+        rankList2.add(frrr3);
+        FocusTimeRank  frrr4 = new FocusTimeRank();
+        frrr4.userName = "boot";
+        frrr4.focusTime = 17.0;
+        frrr4.rank = 4;
+        rankList2.add(frrr4);
         FocusTimeRankListAdapter fa2 = new FocusTimeRankListAdapter(rankList2);
         rankListFocusDegree.setAdapter(fa2);
         System.out.println("rankList2.size()="+rankList2.size());

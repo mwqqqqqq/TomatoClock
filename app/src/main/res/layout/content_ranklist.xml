@@ -21,27 +21,42 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="527dp">
+                android:layout_height="666dp">
 
                 <TextView
                     android:id="@+id/textView9"
                     android:layout_width="174dp"
                     android:layout_height="73dp"
-                    android:layout_marginStart="37dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_marginBottom="1dp"
                     android:text="TextView"
+                    app:layout_constraintBottom_toTopOf="@+id/rankListFocusTime"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rankListFocusTime"
-                    android:layout_width="0dp"
+                    android:layout_width="267dp"
                     android:layout_height="374dp"
                     android:layout_marginStart="75dp"
+                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="75dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                    app:layout_constraintTop_toBottomOf="@id/textView9" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="177dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="204dp"
+                    android:layout_marginEnd="36dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toTopOf="@+id/textView9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

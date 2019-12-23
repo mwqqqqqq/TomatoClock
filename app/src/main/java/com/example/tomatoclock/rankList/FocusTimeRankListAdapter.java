@@ -53,13 +53,17 @@ public class FocusTimeRankListAdapter extends RecyclerView.Adapter<FocusTimeRank
         FocusTimeRank rankRecord = mRankRecords.get(position);
         //holder.focusRecordsImage.setImageResource(R.drawable.focusimage_clock);
         if(position == 0)//第一名
-            holder.focusRecordsImage.setImageResource(R.drawable.focusimage_clock);
-        String rankStr = String.valueOf(rankRecord.rank);
-        String focusTimeStr = String.valueOf(rankRecord.focusTime);
-        String userStr = rankRecord.userName;
-        Spannable rankRecordStr = new SpannableString(rankStr+" "+userStr+" "+focusTimeStr);
-        rankRecordStr.setSpan(new ForegroundColorSpan(Color.BLACK),0,rankRecordStr.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        rankRecordStr.setSpan(new AbsoluteSizeSpan(30),0,rankRecordStr.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            holder.focusRecordsImage.setImageResource(R.drawable.gold);
+        else if(position == 1) // 第二名
+            holder.focusRecordsImage.setImageResource(R.drawable.silver);
+        else if(position == 2) // 第三名
+            holder.focusRecordsImage.setImageResource(R.drawable.blonde);
+        String rankStr = String.valueOf(rankRecord.rank)+"    ";
+        String focusTimeStr = String.valueOf((int)rankRecord.focusTime);
+        String userStr = rankRecord.userName+"    ";
+        Spannable rankRecordStr = new SpannableString(rankStr+userStr+focusTimeStr);
+        rankRecordStr.setSpan(new ForegroundColorSpan(Color.BLACK),0,rankStr.length()+userStr.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        rankRecordStr.setSpan(new AbsoluteSizeSpan(80),0,rankStr.length()+userStr.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         holder.focusRecordsText.setText(rankRecordStr);
     }
 
