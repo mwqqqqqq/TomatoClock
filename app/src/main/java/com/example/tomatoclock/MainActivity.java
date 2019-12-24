@@ -3,6 +3,7 @@ package com.example.tomatoclock;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import com.example.tomatoclock.Task.Task;
 import com.example.tomatoclock.Task.TasksActivity;
@@ -10,6 +11,7 @@ import com.example.tomatoclock.StudyRoom.StudyRoomActivity;
 import com.example.tomatoclock.StudyRoom.JoinStudyRoomActivity;
 import com.example.tomatoclock.rankList.RankListActivity;
 import com.example.tomatoclock.report.ShowReport;
+import com.example.tomatoclock.Coin;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import java.io.InputStream;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     // 当前应用的背景图片ID，闹铃声ID
     public static int Current_BackImg = - 1;
     public static int Current_Alarm = - 1;
+    private String userName;
     private int startTime = 0;
 
     Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+8"));
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        userName = this.getIntent().getStringExtra("用户名");
         // 用于传专注信息
         final Focus ff = new Focus();
         super.onCreate(savedInstanceState);
@@ -92,6 +95,16 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        // 读取当前账户对应的背景图片ID
+        ReadCoins();
+        // 为背景图片下设置时间数能看清
+        EditText edt = (EditText) findViewById(R.id.edt_settime);
+        edt.setBackgroundColor(Color.WHITE);
+        TextView stt1 = (TextView) findViewById(R.id.SetTimeText1);
+        stt1.setBackgroundColor(Color.WHITE);
+        TextView stt2 = (TextView) findViewById(R.id.SetTimeText2);
+        stt2.setBackgroundColor(Color.WHITE);
 
 //        LinearLayout drawer_header = navigationView.findViewById(R.id.drawer_header);
 //        TextView userNameInfoText = drawer_header.findViewById(R.id.userNameInfo);
@@ -146,6 +159,7 @@ public class MainActivity extends AppCompatActivity
                 }.start();
                 ff.startHour = cal.get(Calendar.HOUR_OF_DAY);
                 ff.startMinute = cal.get(Calendar.MINUTE);
+
             }
         });
 
@@ -212,7 +226,7 @@ public class MainActivity extends AppCompatActivity
                             new Thread(){
                                 public void run() {
                                     try {
-                                        String path="http://49.232.5.236:8080/test/CoinsAction?user=moweiqi&sub=-100";
+                                        String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=-100";
                                         System.out.println(path);
                                         URL url = new URL(path);
                                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -250,6 +264,8 @@ public class MainActivity extends AppCompatActivity
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        //WriteCoins(-100);
     }
 
     public String getGapTime(long time){
@@ -312,6 +328,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the camera action
+            Intent intent = new Intent(this, MainActivity.class);
+            String userName = this.getIntent().getStringExtra("用户名");
+            intent.putExtra("userName", userName);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(this, TasksActivity.class);
             String userName = this.getIntent().getStringExtra("用户名");
@@ -322,8 +342,6 @@ public class MainActivity extends AppCompatActivity
             String userName = this.getIntent().getStringExtra("用户名");
             intent.putExtra("userName", userName);
             startActivity(intent);
-
-
         }
         else if (id == R.id.nav_slideshow2)
         {
@@ -366,6 +384,89 @@ public class MainActivity extends AppCompatActivity
             drawer.setBackgroundResource(R.mipmap.back4);
 
     }
+
+    // 进入主界面即要读取当前应用的背景图片ID，背景铃声ID，金币数
+    private void ReadCoins() {
+        userName = this.getIntent().getStringExtra("用户名");
+
+        Thread thread = new Thread(){
+            public void run(){
+                try{
+                    String path="http://49.232.5.236:8080/test/resStatus?user="+userName;
+                    System.out.println(userName);
+                    URL url=new URL(path);
+                    HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent","Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code=conn.getResponseCode();
+                    if(code==200){
+                        InputStream is=conn.getInputStream();
+                        String result=StreamTools.readInputStream(is);
+                        System.out.println(userName);
+                        System.out.println(result);
+                        JSONObject demoJson = new JSONObject(result);
+                        int coins = demoJson.getInt("coins");
+                        int t_background = demoJson.getInt("t_background");
+                        int t_alarm = demoJson.getInt("t_alarm");
+
+                        MainActivity.coins = coins;
+                        MainActivity.Current_BackImg = t_background;
+                        MainActivity.Current_Alarm = t_alarm;
+                        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                        if (Current_BackImg == 0 )
+                            drawer.setBackgroundResource(R.mipmap.back0);
+                        else if (Current_BackImg == 1 )
+                            drawer.setBackgroundResource(R.mipmap.back1);
+                        else if (Current_BackImg == 2 )
+                            drawer.setBackgroundResource(R.mipmap.back2);
+                        else if (Current_BackImg == 3 )
+                            drawer.setBackgroundResource(R.mipmap.back3);
+                        else if (Current_BackImg == 4 )
+                            drawer.setBackgroundResource(R.mipmap.back4);
+                    }
+                }catch(Exception e){
+                    return;
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 金币更新函数，默认为将金币减去index
+    private void WriteCoins(int index) {
+        userName = this.getIntent().getStringExtra("用户名");
+        final String temp = index + "";
+        Thread thread = new Thread(){
+            public void run(){
+                try{
+                    String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=" + temp;
+                    System.out.println(userName);
+                    URL url=new URL(path);
+                    HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("User-Agent","Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code=conn.getResponseCode();
+
+                    System.out.println(code);
+
+                }catch(Exception e){
+                    return;
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public boolean hasStudyRoom(final String userName){
         final int[] resultCode = {0};

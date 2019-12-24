@@ -21,18 +21,32 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:gravity="center"
+            android:id="@+id/SetTimeText0"
+            android:layout_width="50dp"
+            android:layout_height="fill_parent"/>
+        <TextView
+            android:id="@+id/SetTimeText1"
+            android:layout_width="140dp"
+            android:layout_height="fill_parent"
+            android:gravity="right"
+            android:textSize="30dp"
             android:text="设置时间:" />
 
         <EditText
             android:id="@+id/edt_settime"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="100dp"
+            android:layout_height="fill_parent"
+            android:gravity="center"
             android:inputType="number" />
+
+        <TextView
+            android:id="@+id/SetTimeText2"
+            android:layout_width="40dp"
+            android:layout_height="fill_parent"
+            android:gravity="left"
+            android:textSize="30dp"
+            android:text="秒" />
+
     </LinearLayout>
 
     <Chronometer
