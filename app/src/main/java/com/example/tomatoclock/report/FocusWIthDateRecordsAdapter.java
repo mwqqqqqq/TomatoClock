@@ -50,7 +50,7 @@ public class FocusWIthDateRecordsAdapter extends RecyclerView.Adapter<FocusWIthD
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        Focus focus = mFocusRecords.get(position);
+        FocusWIthDate focus = mFocusRecords.get(position);
         holder.focusRecordsImage.setImageResource(R.drawable.focusimage_clock);
         String strFocusStartHour = String.valueOf(focus.startHour);
         String strFocusStartMinute = String.valueOf(focus.startMinute);
@@ -60,12 +60,12 @@ public class FocusWIthDateRecordsAdapter extends RecyclerView.Adapter<FocusWIthD
         if(focus.startMinute < 10)
             strFocusStartMinute = "0" + strFocusStartMinute;
 
-
+        String focusRecordStr0 = String.valueOf(focus.year) + "-"+String.valueOf(focus.month)+"-"+String.valueOf(focus.dayOfMonth)+'\n';
         String focusRecordStr1 = strFocusStartHour+":"+strFocusStartMinute+"\n";
         String focusRecordStr2 = focus.dura+"分钟";
-        Spannable focusRecordStr = new SpannableString(focusRecordStr1+focusRecordStr2);
-        focusRecordStr.setSpan(new ForegroundColorSpan(Color.BLACK),0,focusRecordStr1.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        focusRecordStr.setSpan(new AbsoluteSizeSpan(80),0,focusRecordStr1.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        Spannable focusRecordStr = new SpannableString(focusRecordStr0+focusRecordStr1+focusRecordStr2);
+        focusRecordStr.setSpan(new ForegroundColorSpan(Color.BLACK),focusRecordStr0.length(),focusRecordStr0.length()+focusRecordStr1.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        focusRecordStr.setSpan(new AbsoluteSizeSpan(80),focusRecordStr0.length(),focusRecordStr0.length()+focusRecordStr1.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         holder.focusRecordsText.setText(focusRecordStr);
     }
 

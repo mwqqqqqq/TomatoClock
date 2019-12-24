@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tomatoclock.R;
+import com.example.tomatoclock.rankList.FocusTimeRank;
 
 import java.util.List;
 
@@ -23,12 +24,14 @@ public class FocusRecordsAdapter extends RecyclerView.Adapter<FocusRecordsAdapte
     static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView focusRecordsImage;
         TextView focusRecordsText;
+        //TextView dateInfoText;
 
         public ViewHolder(View view)
         {
             super(view);
             focusRecordsImage = (ImageView) view.findViewById(R.id.focus_image);
             focusRecordsText = (TextView) view.findViewById(R.id.focus_text);
+            //dateInfoText = (TextView) view.findViewById(R.id.dateInfo);
         }
     }
 
@@ -60,7 +63,8 @@ public class FocusRecordsAdapter extends RecyclerView.Adapter<FocusRecordsAdapte
         if(focus.startMinute < 10)
             strFocusStartMinute = "0" + strFocusStartMinute;
 
-
+        //FocusWIthDate fd = (FocusWIthDate)focus;
+        //holder.dateInfoText.setText(fd.year);
         String focusRecordStr1 = strFocusStartHour+":"+strFocusStartMinute+"\n";
         String focusRecordStr2 = focus.dura+"分钟";
         Spannable focusRecordStr = new SpannableString(focusRecordStr1+focusRecordStr2);

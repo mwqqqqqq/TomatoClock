@@ -144,7 +144,9 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         showAllRecords.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(root.getContext(), ShowAllFocusRecords.class);
+                intent.putExtra("userName", userName);
                 startActivity(intent);
             }
         });
@@ -819,7 +821,10 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
 
     public void onClickAllrecords(View view)
     {
+        //userName = getArguments().getString("userName");
+        System.out.println("onClick"+userName);
         Intent intent = new Intent(root.getContext(), ShowAllFocusRecords.class);
+        intent.putExtra("userName", userName);
         startActivity(intent);
     }
 

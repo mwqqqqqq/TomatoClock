@@ -76,7 +76,7 @@ public class RankListActivity extends AppCompatActivity implements
 
 
         TextView rankListUpdateTime = findViewById(R.id.textView10);
-        String rankListUpdateTimeStr1 = "* 排行数据每日12点更新";
+        String rankListUpdateTimeStr1 = "* 排行数据每日24点更新";
         Spannable rankListUpdateTimeStr = new SpannableString(rankListUpdateTimeStr1);
         rankListUpdateTime.setText(rankListUpdateTimeStr);
 

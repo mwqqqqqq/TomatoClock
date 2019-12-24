@@ -29,13 +29,20 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 
@@ -101,30 +108,74 @@ public class ReportByWeekFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final String finalUserName =getArguments().getString("userName");
 
         String local = "GMT+8";//获取当前时间
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone(local));
         cal.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
-        String dateStr = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
+        final String dateStr = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
         String timeStr = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND);
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - cal.get(Calendar.DAY_OF_WEEK));
         String dateThisMondayStr = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
         cal.add(Calendar.DATE, 6);
         String dateThisSundayStr = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
+        final String[] xAxisDate = new String[7];
+        final List<BarEntry> entries = new ArrayList<>();
+        userName = getArguments().getString("userName");
+        new Thread() {
+            public void run() {
+                try {
+                    String path = "http://49.232.5.236:8080/test/FocusTimeByDayOfWeek?user="+finalUserName+"&date="+dateStr;
+                    System.out.println(path);
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    // List<Focus> newFocusList = new ArrayList<>();
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code = conn.getResponseCode();
+                    if (code == 200) {
+                        InputStream is = conn.getInputStream();
+                        String result = StreamTools.readInputStream(is);
+                        //JSONArray demo = new JSONArray(result);
+                        JSONObject  day2Time = new JSONObject(result);
+                        Iterator iter = day2Time.keys();
+                        int i = 0;
+                        while(iter.hasNext())
+                        {
+                            String dateStr = iter.next().toString();
+                            xAxisDate[i] = dateStr.substring(5);
+                            entries.add(new BarEntry(i, day2Time.getInt(dateStr)));
+                            System.out.println(xAxisDate[i]+" " + day2Time.getInt(dateStr));
+                            i++;
 
+
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+
+                    //System.out.println();
+
+                }
+            }
+
+        }.start();
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_report_by_week, container, false);
-        textViewDate = root.findViewById(R.id.textView13);
-        textViewDate.setText(dateThisMondayStr+" To "+dateThisSundayStr);
-        userName = getArguments().getString("userName");
+        while(entries.size() != 7)
+            continue;
+        //textViewDate = root.findViewById(R.id.textView13);
+        //textViewDate.setText(dateThisMondayStr+" To "+dateThisSundayStr);
+
         chart =  root.findViewById(R.id.chart);
         //此处应该替换为去给定接口取数
-        List<BarEntry> entries = new ArrayList<>();
+
         //chart.setDrawLabels(true);
 
         XAxis xAxis = chart.getXAxis();
-        final String[] values = {"周一","周二","周三","周四","周五","周六","周日"};
+        final String[] values = xAxisDate;
         ValueFormatter formatter = new  ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
@@ -142,14 +193,14 @@ public class ReportByWeekFragment extends Fragment {
         Description description = new Description();
         description.setText("");
         chart.setDescription(description);
-        entries.add(new BarEntry(0f, 30f));
-        entries.add(new BarEntry(1f, 80f));
-        entries.add(new BarEntry(2f, 60f));
-        entries.add(new BarEntry(3f, 50f));
-        entries.add(new BarEntry(4,20));
-        // gap of 2f
-        entries.add(new BarEntry(5f, 70f));
-        entries.add(new BarEntry(6f,40f));
+//        entries.add(new BarEntry(0f, 30f));
+//        entries.add(new BarEntry(1f, 80f));
+//        entries.add(new BarEntry(2f, 60f));
+//        entries.add(new BarEntry(3f, 50f));
+//        entries.add(new BarEntry(4,20));
+//        // gap of 2f
+//        entries.add(new BarEntry(5f, 70f));
+//        entries.add(new BarEntry(6f,40f));
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
         set.setColor(Color.parseColor("#FFA500"));
@@ -177,9 +228,50 @@ public class ReportByWeekFragment extends Fragment {
 
         //中断次数相关的图表和文字
         interruptChart = root.findViewById(R.id.interruptChart);
-        List<BarEntry> entriesInter = new ArrayList<>();
+        final List<BarEntry> entriesInter = new ArrayList<>();
         XAxis xAxisInter = interruptChart.getXAxis();
-        final String[] valuesInter = {"周一","周二","周三","周四","周五","周六","周日"};
+        final String[] valuesInter = new String[7];
+        new Thread() {
+            public void run() {
+                try {
+                    String path = "http://49.232.5.236:8080/test/InterruptionTimesByDayOfWeek?user="+finalUserName+"&date="+dateStr;
+                    System.out.println(path);
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    // List<Focus> newFocusList = new ArrayList<>();
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                    int code = conn.getResponseCode();
+                    if (code == 200) {
+                        InputStream is = conn.getInputStream();
+                        String result = StreamTools.readInputStream(is);
+                        //JSONArray demo = new JSONArray(result);
+                        JSONObject  day2Time = new JSONObject(result);
+                        Iterator iter = day2Time.keys();
+                        int i = 0;
+                        while(iter.hasNext())
+                        {
+                            String dateStr = iter.next().toString();
+                            valuesInter[i] = dateStr.substring(5);
+                            entriesInter.add(new BarEntry(i, day2Time.getInt(dateStr)));
+                            System.out.println(xAxisDate[i]+" " + day2Time.getInt(dateStr));
+                            i++;
+
+
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+
+                    //System.out.println();
+
+                }
+            }
+
+        }.start();
+        while(entriesInter.size() !=7 )
+            continue;
         ValueFormatter formatterInter = new  ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
@@ -198,9 +290,9 @@ public class ReportByWeekFragment extends Fragment {
         descriptionInter.setText("");
         interruptChart.setDescription(descriptionInter);
 
-        entriesInter.add(new BarEntry(0, 2));
-        entriesInter.add(new BarEntry(1, 2));
-        entriesInter.add(new BarEntry(2, 0));
+        //entriesInter.add(new BarEntry(0, 2));
+        //entriesInter.add(new BarEntry(1, 2));
+        //entriesInter.add(new BarEntry(2, 0));
         BarDataSet setInter = new BarDataSet(entriesInter, "BarDataSetInter");
         setInter.setColor(Color.parseColor("#FFA500"));
         BarData dataInter = new BarData(setInter);
@@ -261,7 +353,7 @@ public class ReportByWeekFragment extends Fragment {
         focusTimeThisWeek = root.findViewById(R.id.chartTitle);
         //TextPaint paint = focusTodayText.getPaint();
         //paint.setFakeBoldText(true);
-        String focusTodayTextStr1 = "本周专注时长:\n";
+        String focusTodayTextStr1 = "过去七天专注时长:\n";
         String focusTodayTextStr2 = String.valueOf(newFocusTime);
         String focusTodayTextStr3 = "分钟";
 
@@ -320,7 +412,7 @@ public class ReportByWeekFragment extends Fragment {
         interruptTimesThisWeek = root.findViewById(R.id.interruptChartTitle);
         //TextPaint paint = focusTodayText.getPaint();
         //paint.setFakeBoldText(true);
-        String focusTodayTextStr1 = "本周打断次数:\n";
+        String focusTodayTextStr1 = "过去七天打断次数:\n";
         String focusTodayTextStr2 = String.valueOf(newInterruptTimes);
         String focusTodayTextStr3 = "次";
 

@@ -52,7 +52,7 @@ public class ShowAllFocusRecords extends AppCompatActivity {
             }
         });
 
-        finalUserName = "boot";
+        finalUserName = this.getIntent().getStringExtra("userName");
 
         String local = "GMT+8";//获取当前时间
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone(local));
@@ -65,7 +65,7 @@ public class ShowAllFocusRecords extends AppCompatActivity {
         new Thread() {
             public void run() {
                 try {
-                    String path = "http://49.232.5.236:8080/test/focusByDay?user=" + finalUserName + "&date=" + finalDate;
+                    String path = "http://49.232.5.236:8080/test/AllFocusRecords?user=" + finalUserName;
                     System.out.println(path);
                     URL url = new URL(path);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -80,16 +80,23 @@ public class ShowAllFocusRecords extends AppCompatActivity {
                         for(int i = 0;i < demo.length();i++)
                         {
                             JSONObject item = (JSONObject) demo.get(i);
-                            String beginTime = item.getString("begin");
-                            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                            Date date = format.parse(beginTime);
+                            String str = item.getString("work_begin");
+                            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            str = str.substring(0,str.length()-2);
+                            System.out.println("mystr"+str);
+
+                            Date date = format1.parse(str);
                             FocusWIthDate f = new FocusWIthDate();
                             f.startHour = date.getHours();
                             f.startMinute = date.getMinutes();
-                            f.dura =(int) Double.parseDouble(item.getString("time"));
-                            f.year = "2019";
-                            f.month = "11";
-                            f.dayOfMonth = "16";
+
+                            f.year = String.valueOf(date.getYear()+1900);
+                            System.out.println("year"+f.year);
+                            f.month = String.valueOf(date.getMonth()+1);
+                            f.dayOfMonth = String.valueOf(date.getDate());
+
+                            f.dura = Integer.parseInt(item.getString("work_time").split(":")[0]) * 60 +
+                                    Integer.parseInt(item.getString("work_time").split(":")[1]);
 
                             focusList.add(f);
                             //updateFocusByDay(focusList);
