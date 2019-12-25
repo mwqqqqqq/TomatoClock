@@ -362,11 +362,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
-            Intent intent = new Intent(this, MainActivity.class);
-            String userName = this.getIntent().getStringExtra("用户名");
-            intent.putExtra("userName", userName);
-            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(this, TasksActivity.class);
             String userName = this.getIntent().getStringExtra("用户名");
@@ -378,7 +373,7 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("userName", userName);
             startActivity(intent);
         }
-        else if (id == R.id.nav_slideshow)
+        else if (id == R.id.nav_slideshow2)
         {
             Intent intent = new Intent(this, RankListActivity.class);
             String userName = this.getIntent().getStringExtra("用户名");
