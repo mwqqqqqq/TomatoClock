@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity
                             new Thread(){
                                 public void run() {
                                     try {
-                                        String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=-100";
+                                        String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=-"+ startTime;
                                         System.out.println(path);
                                         URL url = new URL(path);
                                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity
 
     protected void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("叮铃铃").setMessage("恭喜你完成一个番茄周期，获得金币100")
+        builder.setTitle("叮铃铃").setMessage("恭喜你完成一个番茄周期，获得金币"+startTime)
                 .setPositiveButton("确定",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog,int which) {
