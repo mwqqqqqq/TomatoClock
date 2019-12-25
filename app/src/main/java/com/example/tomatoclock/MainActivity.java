@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     String WorkTime;
     public int ddl_id;
 
+
     Calendar calendar = Calendar.getInstance();
     int beginHour;
 
@@ -242,6 +243,35 @@ public class MainActivity extends AppCompatActivity
                                             InputStream is=conn.getInputStream();
                                             String result=StreamTools.readInputStream(is);
                                             System.out.println(result);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }.start();
+                            ff.dura = ((int)SystemClock.elapsedRealtime()- (int)chronometer.getBase());
+                            WorkEnd = s.format(cal.getTime());
+                            WorkEnd.replace(" ", "%20");
+                            WorkBegin.replace(" ", "%20");
+                            WorkTime= getGapTime((long)ff.dura);
+                            final String d = s2.format(cal.getTime());
+                            new Thread(){
+                                public void run() {
+                                    try {
+                                        String path = "http://49.232.5.236:8080/test/WorkAdd?work_begin="+WorkBegin+"&work_end="+WorkEnd+"&interruption=0&work_time="+WorkTime+"&user_name="+userName+"&ddl_id="+ddl_id+"&date="+d;
+                                        System.out.println(path);
+                                        URL url = new URL(path);
+                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                        conn.setRequestMethod("GET");
+                                        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                                        int code = conn.getResponseCode();
+                                        if (code == 200) {
+                                            InputStream is=conn.getInputStream();
+                                            String result=StreamTools.readInputStream(is);
+                                            JSONObject demoJson = new JSONObject(result);
+                                            if(demoJson.getString("code").equals("0")){
+                                                System.out.println("sorry, failed");
+                                            }
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
