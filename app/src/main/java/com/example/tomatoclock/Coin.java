@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.tomatoclock.Task.Task;
 import com.example.tomatoclock.Task.TaskAdapter;
 import com.example.tomatoclock.Task.TasksActivity;
+import com.example.tomatoclock.rankList.RankListActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -97,11 +98,11 @@ public class Coin extends AppCompatActivity
     private View.OnClickListener listener = new View.OnClickListener() {
         public void onClick(View v) {
             for (int i = 0; i < MainActivity.BackImg_num; i ++) {
-                // 目前统一售价40金币，后续更新
-                if (v == backb[i] && BackImg[i] == '0' && MainActivity.coins >= 40) {
+                // 目前统一售价50金币，后续更新
+                if (v == backb[i] && BackImg[i] == '0' && MainActivity.coins >= 50) {
                     // 正常购买
-                    MainActivity.coins -= 40;
-                    WriteCoins(40);
+                    MainActivity.coins -= 50;
+                    WriteCoins(50);
                     CoinBalance.setText("金币数：" + String.valueOf(MainActivity.coins));
                     BackImg[i] = '1';
                     WriteBackImg(i);
@@ -115,7 +116,7 @@ public class Coin extends AppCompatActivity
                     WriteCurrentImg();
                     Toast.makeText(Coin.this,"背景更换成功", Toast.LENGTH_SHORT).show();
                 }
-                else if(v == backb[i] && BackImg[i] == '0' && MainActivity.coins < 40){
+                else if(v == backb[i] && BackImg[i] == '0' && MainActivity.coins < 50){
                     // 欲购买，金币不足
                     Toast.makeText(Coin.this,"金币不足", Toast.LENGTH_SHORT).show();
                 }
@@ -148,7 +149,7 @@ public class Coin extends AppCompatActivity
                         BackImg = background.toCharArray();
                         String alarm = demoJson.getString("alarm");
                         Alarm = alarm.toCharArray();
-                        MainActivity.coins = coins + 1000;
+                        MainActivity.coins = coins;
                         MainActivity.Current_BackImg = t_background;
                         MainActivity.Current_Alarm = t_alarm;
                         //String ddl_date = tempJson.getString("ddl_date");
@@ -302,7 +303,14 @@ public class Coin extends AppCompatActivity
             intent.putExtra("用户名", userName);
             startActivity(intent);
 
-        } else if (id == R.id.nav_tools) {
+        }
+        else if (id == R.id.nav_slideshow2)
+        {
+            Intent intent = new Intent(this, RankListActivity.class);
+            String userName = this.getIntent().getStringExtra("用户名");
+            intent.putExtra("userName", userName);
+            startActivity(intent);
+        }else if (id == R.id.nav_tools) {
 
 
         } else if (id == R.id.nav_share) {

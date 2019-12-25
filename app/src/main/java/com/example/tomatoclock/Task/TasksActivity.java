@@ -33,6 +33,7 @@ import com.example.tomatoclock.LoginActivity;
 import com.example.tomatoclock.MainActivity;
 import com.example.tomatoclock.R;
 import com.example.tomatoclock.StreamTools;
+import com.example.tomatoclock.rankList.RankListActivity;
 import com.example.tomatoclock.report.ShowReport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -458,7 +459,13 @@ public class TasksActivity extends AppCompatActivity
             intent.putExtra("用户名", userName);
             startActivity(intent);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_slideshow2)
+        {
+            Intent intent = new Intent(this, RankListActivity.class);
+            String userName = this.getIntent().getStringExtra("用户名");
+            intent.putExtra("userName", userName);
+            startActivity(intent);
+        }else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
