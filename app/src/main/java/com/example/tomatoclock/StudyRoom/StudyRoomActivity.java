@@ -45,6 +45,7 @@ public class StudyRoomActivity extends AppCompatActivity {
     String WorkEnd;
     String WorkTime;
     public int ddl_id;
+    int mem_num = 0;
 
 
     @Override
@@ -177,7 +178,9 @@ public class StudyRoomActivity extends AppCompatActivity {
                             new Thread(){
                                 public void run() {
                                     try {
-                                        String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=-"+ startTime*2;
+                                        double coin_num = startTime*Math.sqrt(mem_num);
+                                        int coin = (int)coin_num;
+                                        String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=-"+ coin;
                                         System.out.println(path);
                                         URL url = new URL(path);
                                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -236,7 +239,9 @@ public class StudyRoomActivity extends AppCompatActivity {
 
     protected void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("叮铃铃").setMessage("恭喜你完成一个番茄周期，获得金币"+startTime*2)
+        double coin_num = startTime*Math.sqrt(mem_num);
+        int coin = (int)coin_num;
+        builder.setTitle("叮铃铃").setMessage("恭喜你完成一个番茄周期，获得金币"+coin)
                 .setPositiveButton("确定",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog,int which) {
@@ -282,11 +287,15 @@ public class StudyRoomActivity extends AppCompatActivity {
                         System.out.println(result);
                         JSONArray demoJson = new JSONArray(result);
                         String roomMembers = "";
+                        mem_num = 0;
                         for(int i = 0; i < demoJson.length(); ++i){
                             JSONObject tempJson = demoJson.getJSONObject(i);
                             roomMembers = roomMembers.concat(tempJson.getString("user") + "  ");
+                            mem_num += 1;
                         }
                         roomMembersText.setText(roomMembers);
+                        String infor = "当前共"+mem_num+"人：";
+                        roomMemNumText.setText(infor);
                     }
                 } catch (Exception e) {
                     return;
