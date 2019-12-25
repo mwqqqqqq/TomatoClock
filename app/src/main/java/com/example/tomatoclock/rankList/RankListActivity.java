@@ -71,6 +71,16 @@ public class RankListActivity extends AppCompatActivity implements
         fr2.rank = 2;
         fr2.userName = "Reiner";
         rankList.add(fr2);
+        FocusTimeRank frr3 = new FocusTimeRank();
+        frr3.userName = "Bertolt";
+        frr3.focusTime = 1900;
+        frr3.rank = 3;
+        rankList.add(frr3);
+        FocusTimeRank  frr4 = new FocusTimeRank();
+        frr4.userName = "boot";
+        frr4.focusTime = 1023;
+        frr4.rank = 4;
+        rankList.add(frr4);
         FocusTimeRankListAdapter fa = new FocusTimeRankListAdapter(rankList);
         rankListFocusTime.setAdapter(fa);
 
@@ -82,7 +92,7 @@ public class RankListActivity extends AppCompatActivity implements
 
         rankUserFocusTime = findViewById(R.id.textView9);
         String focusTodayTextStr1 = "专注时长排名:\n";
-        String focusTodayTextStr2 = "30/100";
+        String focusTodayTextStr2 = "4/9";
         //String focusTodayTextStr3 = "分钟";
 
         Spannable focusTodayTextStr =  new SpannableString(focusTodayTextStr1+focusTodayTextStr2);
@@ -121,7 +131,7 @@ public class RankListActivity extends AppCompatActivity implements
 
         rankUserFocusLevel = findViewById(R.id.textView11);
         String focusDegreeStr1 = "专注程度排名:\n";
-        String focusDegreeStr2 = "30/100";
+        String focusDegreeStr2 = "4/9";
         Spannable focusDegreeStr = new SpannableString(focusDegreeStr1+focusDegreeStr2);
         focusDegreeStr.setSpan(new AbsoluteSizeSpan(80),focusTodayTextStr1.length(),focusTodayTextStr1.length()+focusTodayTextStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         focusDegreeStr.setSpan(new ForegroundColorSpan(Color.BLACK),focusTodayTextStr1.length(),focusTodayTextStr1.length()+focusTodayTextStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
