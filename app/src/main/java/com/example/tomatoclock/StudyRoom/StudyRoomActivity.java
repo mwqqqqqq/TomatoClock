@@ -45,6 +45,7 @@ public class StudyRoomActivity extends AppCompatActivity {
     String WorkEnd;
     String WorkTime;
     public int ddl_id;
+    int mem_num = 0;
 
 
     @Override
@@ -177,7 +178,9 @@ public class StudyRoomActivity extends AppCompatActivity {
                             new Thread(){
                                 public void run() {
                                     try {
-                                        String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=-100";
+                                        double coin_num = startTime*Math.sqrt(mem_num);
+                                        int coin = (int)coin_num;
+                                        String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=-"+ coin;
                                         System.out.println(path);
                                         URL url = new URL(path);
                                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -194,6 +197,38 @@ public class StudyRoomActivity extends AppCompatActivity {
                                     }
                                 }
                             }.start();
+                            ff.dura = ((int)SystemClock.elapsedRealtime()- (int)chronometer.getBase());
+                            WorkEnd = s.format(cal.getTime());
+                            WorkEnd.replace(" ", "%20");
+                            WorkBegin.replace(" ", "%20");
+                            WorkTime= getGapTime((long)ff.dura);
+                            final String d = s2.format(cal.getTime());
+                            new Thread(){
+                                public void run() {
+                                    try {
+                                        String path = "http://49.232.5.236:8080/test/WorkAdd?work_begin="+WorkBegin+"&work_end="+WorkEnd+"&interruption=0&work_time="+WorkTime+"&user_name="+userName+"&ddl_id="+ddl_id+"&date="+d;
+                                        System.out.println(path);
+                                        URL url = new URL(path);
+                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                        conn.setRequestMethod("GET");
+                                        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)");
+                                        int code = conn.getResponseCode();
+                                        if (code == 200) {
+                                            InputStream is=conn.getInputStream();
+                                            String result=StreamTools.readInputStream(is);
+                                            JSONObject demoJson = new JSONObject(result);
+                                            if(demoJson.getString("code").equals("0")){
+                                                System.out.println("sorry, failed");
+                                            }
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }.start();
+
+                            ff.dura = startTime;
+
                             // 给用户提示
                             showDialog();
                         }
@@ -204,7 +239,9 @@ public class StudyRoomActivity extends AppCompatActivity {
 
     protected void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("叮铃铃").setMessage("恭喜你完成一个番茄周期，获得金币100")
+        double coin_num = startTime*Math.sqrt(mem_num);
+        int coin = (int)coin_num;
+        builder.setTitle("叮铃铃").setMessage("恭喜你完成一个番茄周期，获得金币"+coin)
                 .setPositiveButton("确定",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog,int which) {
@@ -250,11 +287,15 @@ public class StudyRoomActivity extends AppCompatActivity {
                         System.out.println(result);
                         JSONArray demoJson = new JSONArray(result);
                         String roomMembers = "";
+                        mem_num = 0;
                         for(int i = 0; i < demoJson.length(); ++i){
                             JSONObject tempJson = demoJson.getJSONObject(i);
                             roomMembers = roomMembers.concat(tempJson.getString("user") + "  ");
+                            mem_num += 1;
                         }
                         roomMembersText.setText(roomMembers);
+                        String infor = "当前共"+mem_num+"人：";
+                        roomMemNumText.setText(infor);
                     }
                 } catch (Exception e) {
                     return;

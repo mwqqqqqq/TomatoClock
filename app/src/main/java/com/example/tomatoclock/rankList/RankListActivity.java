@@ -160,6 +160,9 @@ public class RankListActivity extends AppCompatActivity implements
         } else if (id == R.id.nav_slideshow) {
             finish();
             Intent intent = new Intent(this, ShowReport.class);
+            String userName = this.getIntent().getStringExtra("userName");
+            intent.putExtra("userName", userName);
+            intent.putExtra("用户名", userName);
             startActivity(intent);
 
         } else if (id == R.id.nav_slideshow2) {
