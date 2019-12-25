@@ -39,7 +39,6 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
     View create_room_view;
     Dialog create_dialog;
 
-    Calendar calendar = Calendar.getInstance();
     int beginHour;
     int beginMinute;
     int endHour;
@@ -52,6 +51,7 @@ public class JoinStudyRoomActivity extends AppCompatActivity {
         userName = this.getIntent().getStringExtra("userName");
 
     }
+    Calendar calendar = Calendar.getInstance();
 
     public void tryJoinStudyRoom(View view){
         if(join_dialog != null)

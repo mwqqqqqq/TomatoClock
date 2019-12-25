@@ -38,8 +38,7 @@ public class StudyRoomActivity extends AppCompatActivity {
     TextView roomMembersText;
 
     private int startTime = 0;
-
-    Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+8"));
+    Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("Asia/Shanghai"));
     SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat s2 = new SimpleDateFormat("yyyy-MM-dd");
     String WorkBegin;
@@ -89,7 +88,7 @@ public class StudyRoomActivity extends AppCompatActivity {
                 new Thread() {
                     public void run() {
                         try {
-                            String path = "http://49.232.5.236:8080/test/UserFind?user_name=moweiqi";
+                            String path = "http://49.232.5.236:8080/test/UserFind?user_name="+userName;
                             System.out.println(path);
                             URL url = new URL(path);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -134,7 +133,7 @@ public class StudyRoomActivity extends AppCompatActivity {
                 new Thread(){
                     public void run() {
                         try {
-                            String path = "http://49.232.5.236:8080/test/WorkAdd?work_begin="+WorkBegin+"&work_end="+WorkEnd+"&interruption=1&work_time="+WorkTime+"user_name=moweiqi&ddl_id="+ddl_id+"&date="+d;
+                            String path = "http://49.232.5.236:8080/test/WorkAdd?work_begin="+WorkBegin+"&work_end="+WorkEnd+"&interruption=1&work_time="+WorkTime+"&user_name="+userName+"&ddl_id="+ddl_id+"&date="+d;
                             System.out.println(path);
                             URL url = new URL(path);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -178,7 +177,7 @@ public class StudyRoomActivity extends AppCompatActivity {
                             new Thread(){
                                 public void run() {
                                     try {
-                                        String path="http://49.232.5.236:8080/test/CoinsAction?user=moweiqi&sub=-100";
+                                        String path="http://49.232.5.236:8080/test/CoinsAction?user="+userName+"&sub=-100";
                                         System.out.println(path);
                                         URL url = new URL(path);
                                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     private String userName;
     private int startTime = 0;
 
-    Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+8"));
+    Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("Asia/Shanghai"));
     SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat s2 = new SimpleDateFormat("yyyy-MM-dd");
     String WorkBegin;
@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity
     String WorkTime;
     public int ddl_id;
 
+    Calendar calendar = Calendar.getInstance();
+    int beginHour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,12 +132,15 @@ public class MainActivity extends AppCompatActivity
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 // 开始记时
                 chronometer.start();
+
                 WorkBegin = s.format(cal.getTime());
+
+
 
                 new Thread() {
                     public void run() {
                         try {
-                            String path = "http://49.232.5.236:8080/test/UserFind?user_name=moweiqi";
+                            String path = "http://49.232.5.236:8080/test/UserFind?user_name="+userName;
                             System.out.println(path);
                             URL url = new URL(path);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -182,7 +187,7 @@ public class MainActivity extends AppCompatActivity
                 new Thread(){
                     public void run() {
                         try {
-                            String path = "http://49.232.5.236:8080/test/WorkAdd?work_begin="+WorkBegin+"&work_end="+WorkEnd+"&interruption=1&work_time="+WorkTime+"user_name=moweiqi&ddl_id="+ddl_id+"&date="+d;
+                            String path = "http://49.232.5.236:8080/test/WorkAdd?work_begin="+WorkBegin+"&work_end="+WorkEnd+"&interruption=1&work_time="+WorkTime+"&user_name="+userName+"&ddl_id="+ddl_id+"&date="+d;
                             System.out.println(path);
                             URL url = new URL(path);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -343,7 +348,7 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("userName", userName);
             startActivity(intent);
         }
-        else if (id == R.id.nav_slideshow2)
+        else if (id == R.id.nav_slideshow)
         {
             Intent intent = new Intent(this, RankListActivity.class);
             String userName = this.getIntent().getStringExtra("用户名");
