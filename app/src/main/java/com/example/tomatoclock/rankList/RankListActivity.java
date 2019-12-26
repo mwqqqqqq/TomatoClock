@@ -140,11 +140,11 @@ public class RankListActivity extends AppCompatActivity implements
         System.out.println("rankList2.size()="+rankList2.size());
 
         rankUserFocusLevel = findViewById(R.id.textView11);
-        String focusDegreeStr1 = "专注程度排名:\n";
+        String focusDegreeStr1 = "专注程度（专注时间/打断次数）排名:\n";
         String focusDegreeStr2 = "4/9";
         Spannable focusDegreeStr = new SpannableString(focusDegreeStr1+focusDegreeStr2);
-        focusDegreeStr.setSpan(new AbsoluteSizeSpan(80),focusTodayTextStr1.length(),focusTodayTextStr1.length()+focusTodayTextStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        focusDegreeStr.setSpan(new ForegroundColorSpan(Color.BLACK),focusTodayTextStr1.length(),focusTodayTextStr1.length()+focusTodayTextStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        focusDegreeStr.setSpan(new AbsoluteSizeSpan(80),focusDegreeStr1.length(),focusDegreeStr1.length()+focusDegreeStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        focusDegreeStr.setSpan(new ForegroundColorSpan(Color.BLACK),focusDegreeStr1.length(),focusDegreeStr1.length()+focusDegreeStr2.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         rankUserFocusLevel.setText(focusDegreeStr);
 
     }
