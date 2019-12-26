@@ -293,8 +293,9 @@ public class Coin extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(this, TasksActivity.class);
-            String userName = this.getIntent().getStringExtra("用户名");
+            String userName = this.getIntent().getStringExtra("userName");
             intent.putExtra("userName", userName);
+            intent.putExtra("用户名", userName);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(this, ShowReport.class);
@@ -307,8 +308,9 @@ public class Coin extends AppCompatActivity
         else if (id == R.id.nav_slideshow2)
         {
             Intent intent = new Intent(this, RankListActivity.class);
-            String userName = this.getIntent().getStringExtra("用户名");
+            String userName = this.getIntent().getStringExtra("userName");
             intent.putExtra("userName", userName);
+            intent.putExtra("用户名", userName);
             startActivity(intent);
         }else if (id == R.id.nav_tools) {
 
