@@ -116,13 +116,6 @@ public class ShowReport extends AppCompatActivity implements
             startActivity(intent);
             //System.out.println("aaa");
         } else if (id == R.id.nav_slideshow) {
-            finish();
-            Intent intent = new Intent(this, ShowReport.class);
-            String userName = this.getIntent().getStringExtra("userName");
-            intent.putExtra("userName", userName);
-            intent.putExtra("用户名", userName);
-            startActivity(intent);
-
         } else if (id == R.id.nav_slideshow2) {
             Intent intent = new Intent(this, RankListActivity.class);
             String userName = this.getIntent().getStringExtra("userName");

@@ -176,11 +176,6 @@ public class RankListActivity extends AppCompatActivity implements
             startActivity(intent);
 
         } else if (id == R.id.nav_slideshow2) {
-            Intent intent = new Intent(this, RankListActivity.class);
-            String userName = this.getIntent().getStringExtra("userName");
-            intent.putExtra("userName", userName);
-            intent.putExtra("用户名", userName);
-            startActivity(intent);
 
         }else if (id == R.id.nav_tools) {
             Intent intent=new Intent(this, Coin.class);
