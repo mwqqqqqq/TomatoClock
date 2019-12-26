@@ -221,7 +221,13 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
         focusRecords.setLayoutManager(layoutManager);
         setFocusByDay(dateStr,userName);
-        while(!setFocusByDayFi);
+
+        long startTime =  System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
+        while(setFocusByDayFi == false && endTime - startTime < 3000)  endTime = System.currentTimeMillis();
+        setFocusByDayFi = false;
+//        while(setFocusByDayFi == false);
+//        setFocusByDayFi = false;
         fa = new FocusRecordsAdapter(focusList);
         focusRecords.setAdapter(fa);
 
@@ -464,7 +470,12 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
     {
         getActivity().runOnUiThread(new Runnable() {
             @Override
-            public void run() { while(focusList.size()==oldSize);fa.notifyDataSetChanged();
+            public void run() {
+                long startTime =  System.currentTimeMillis();
+                long endTime = System.currentTimeMillis();
+                while(setFocusByDayFi == false && endTime - startTime < 3000)  endTime = System.currentTimeMillis();
+                setFocusByDayFi = false;
+                fa.notifyDataSetChanged();
             }
         });
     }
@@ -805,8 +816,8 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
                             System.out.println("Eren sss " + f.dura);
                         }
                         updateFocusByDay(focusList);
+
                         setFocusByDayFi = true;
-                        //focusListFinish = true;
                         //JSONObject demoJson = new JSONObject(result);
                     }
                     //focusListFinish = true;
