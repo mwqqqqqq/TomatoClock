@@ -79,6 +79,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
 
 
     RecyclerView focusRecords;
+    boolean setFocusByDayFi = false;
 
 
     boolean focusListFinish = false;
@@ -219,9 +220,11 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
         focusRecords = root.findViewById(R.id.focusRecords);//外面加一层relativeLayout
         LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
         focusRecords.setLayoutManager(layoutManager);
+        setFocusByDay(dateStr,userName);
+        while(!setFocusByDayFi);
         fa = new FocusRecordsAdapter(focusList);
         focusRecords.setAdapter(fa);
-        setFocusByDay(dateStr,userName);
+
         //fa.notifyDataSetChanged();
 
 
@@ -802,6 +805,7 @@ public class ReportByDayFragment extends Fragment implements  DatePickerDialog.O
                             System.out.println("Eren sss " + f.dura);
                         }
                         updateFocusByDay(focusList);
+                        setFocusByDayFi = true;
                         //focusListFinish = true;
                         //JSONObject demoJson = new JSONObject(result);
                     }

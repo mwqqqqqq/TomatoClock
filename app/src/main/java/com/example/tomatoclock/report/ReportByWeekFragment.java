@@ -123,6 +123,8 @@ public class ReportByWeekFragment extends Fragment {
         final String[] xAxisDate = new String[7];
         final List<BarEntry> entries = new ArrayList<>();
         userName = getArguments().getString("userName");
+        root = inflater.inflate(R.layout.fragment_report_by_week, container, false);
+        chart =  root.findViewById(R.id.chart);
         new Thread() {
             public void run() {
                 try {
@@ -151,6 +153,43 @@ public class ReportByWeekFragment extends Fragment {
 
 
                         }
+                        XAxis xAxis = chart.getXAxis();
+                        final String[] values = xAxisDate;
+                        ValueFormatter formatter = new  ValueFormatter() {
+                            @Override
+                            public String getAxisLabel(float value, AxisBase axis) {
+                                return values[(int) value];
+                            }
+
+                        };
+
+                        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+                        xAxis.setValueFormatter(formatter);
+                        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                        xAxis.setDrawLabels(true);
+                        Legend legend = chart.getLegend();
+                        legend.setEnabled(false);
+                        Description description = new Description();
+                        description.setText("");
+                        chart.setDescription(description);
+//        entries.add(new BarEntry(0f, 30f));
+//        entries.add(new BarEntry(1f, 80f));
+//        entries.add(new BarEntry(2f, 60f));
+//        entries.add(new BarEntry(3f, 50f));
+//        entries.add(new BarEntry(4,20));
+//        // gap of 2f
+//        entries.add(new BarEntry(5f, 70f));
+//        entries.add(new BarEntry(6f,40f));
+
+                        BarDataSet set = new BarDataSet(entries, "BarDataSet");
+                        set.setColor(Color.parseColor("#FFA500"));
+                        BarData data = new BarData(set);
+                        data.setBarWidth(0.9f); // set custom bar width
+                        chart.setData(data);
+                        chart.setFitBars(true); // make the x-axis fit exactly all bars
+                        chart.invalidate(); // refresh
+
+                        setFocusTimeByWeek(dateStr,userName);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -163,54 +202,54 @@ public class ReportByWeekFragment extends Fragment {
 
         }.start();
         // Inflate the layout for this fragment
-        root = inflater.inflate(R.layout.fragment_report_by_week, container, false);
-        while(entries.size() != 7)
-            continue;
+
+//        while(entries.size() != 7)
+//            continue;
         //textViewDate = root.findViewById(R.id.textView13);
         //textViewDate.setText(dateThisMondayStr+" To "+dateThisSundayStr);
 
-        chart =  root.findViewById(R.id.chart);
+
         //此处应该替换为去给定接口取数
 
-        //chart.setDrawLabels(true);
-
-        XAxis xAxis = chart.getXAxis();
-        final String[] values = xAxisDate;
-        ValueFormatter formatter = new  ValueFormatter() {
-            @Override
-            public String getAxisLabel(float value, AxisBase axis) {
-                return values[(int) value];
-            }
-
-        };
-
-        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-        xAxis.setValueFormatter(formatter);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawLabels(true);
-        Legend legend = chart.getLegend();
-        legend.setEnabled(false);
-        Description description = new Description();
-        description.setText("");
-        chart.setDescription(description);
-//        entries.add(new BarEntry(0f, 30f));
-//        entries.add(new BarEntry(1f, 80f));
-//        entries.add(new BarEntry(2f, 60f));
-//        entries.add(new BarEntry(3f, 50f));
-//        entries.add(new BarEntry(4,20));
-//        // gap of 2f
-//        entries.add(new BarEntry(5f, 70f));
-//        entries.add(new BarEntry(6f,40f));
-
-        BarDataSet set = new BarDataSet(entries, "BarDataSet");
-        set.setColor(Color.parseColor("#FFA500"));
-        BarData data = new BarData(set);
-        data.setBarWidth(0.9f); // set custom bar width
-        chart.setData(data);
-        chart.setFitBars(true); // make the x-axis fit exactly all bars
-        chart.invalidate(); // refresh
-
-        setFocusTimeByWeek(dateStr,userName);
+//        //chart.setDrawLabels(true);
+//
+//        XAxis xAxis = chart.getXAxis();
+//        final String[] values = xAxisDate;
+//        ValueFormatter formatter = new  ValueFormatter() {
+//            @Override
+//            public String getAxisLabel(float value, AxisBase axis) {
+//                return values[(int) value];
+//            }
+//
+//        };
+//
+//        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+//        xAxis.setValueFormatter(formatter);
+//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+//        xAxis.setDrawLabels(true);
+//        Legend legend = chart.getLegend();
+//        legend.setEnabled(false);
+//        Description description = new Description();
+//        description.setText("");
+//        chart.setDescription(description);
+////        entries.add(new BarEntry(0f, 30f));
+////        entries.add(new BarEntry(1f, 80f));
+////        entries.add(new BarEntry(2f, 60f));
+////        entries.add(new BarEntry(3f, 50f));
+////        entries.add(new BarEntry(4,20));
+////        // gap of 2f
+////        entries.add(new BarEntry(5f, 70f));
+////        entries.add(new BarEntry(6f,40f));
+//
+//        BarDataSet set = new BarDataSet(entries, "BarDataSet");
+//        set.setColor(Color.parseColor("#FFA500"));
+//        BarData data = new BarData(set);
+//        data.setBarWidth(0.9f); // set custom bar width
+//        chart.setData(data);
+//        chart.setFitBars(true); // make the x-axis fit exactly all bars
+//        chart.invalidate(); // refresh
+//
+//        setFocusTimeByWeek(dateStr,userName);
 //        int newFocusTime = 10;
 //        focusTimeThisWeek = root.findViewById(R.id.chartTitle);
 //        //TextPaint paint = focusTodayText.getPaint();
@@ -228,9 +267,7 @@ public class ReportByWeekFragment extends Fragment {
 
         //中断次数相关的图表和文字
         interruptChart = root.findViewById(R.id.interruptChart);
-        final List<BarEntry> entriesInter = new ArrayList<>();
-        XAxis xAxisInter = interruptChart.getXAxis();
-        final String[] valuesInter = new String[7];
+
         new Thread() {
             public void run() {
                 try {
@@ -249,6 +286,9 @@ public class ReportByWeekFragment extends Fragment {
                         JSONObject  day2Time = new JSONObject(result);
                         Iterator iter = day2Time.keys();
                         int i = 0;
+                        final List<BarEntry> entriesInter = new ArrayList<>();
+                        XAxis xAxisInter = interruptChart.getXAxis();
+                        final String[] valuesInter = new String[7];
                         while(iter.hasNext())
                         {
                             String dateStr = iter.next().toString();
@@ -259,6 +299,37 @@ public class ReportByWeekFragment extends Fragment {
 
 
                         }
+                        ValueFormatter formatterInter = new  ValueFormatter() {
+                            @Override
+                            public String getAxisLabel(float value, AxisBase axis) {
+                                return valuesInter[(int) value];
+                            }
+
+                        };
+
+                        xAxisInter.setGranularity(1f); // minimum axis-step (interval) is 1
+                        xAxisInter.setValueFormatter(formatterInter);
+                        xAxisInter.setPosition(XAxis.XAxisPosition.BOTTOM);
+                        xAxisInter.setDrawLabels(true);
+                        Legend legendInter = interruptChart.getLegend();
+                        legendInter.setEnabled(false);
+                        Description descriptionInter = new Description();
+                        descriptionInter.setText("");
+                        interruptChart.setDescription(descriptionInter);
+
+                        //entriesInter.add(new BarEntry(0, 2));
+                        //entriesInter.add(new BarEntry(1, 2));
+                        //entriesInter.add(new BarEntry(2, 0));
+                        BarDataSet setInter = new BarDataSet(entriesInter, "BarDataSetInter");
+                        setInter.setColor(Color.parseColor("#FFA500"));
+                        BarData dataInter = new BarData(setInter);
+                        dataInter.setBarWidth(0.9f); // set custom bar width
+                        interruptChart.setData(dataInter);
+                        interruptChart.setFitBars(true); // make the x-axis fit exactly all bars
+                        interruptChart.invalidate(); // refresh
+
+                        setInterruptTimesByWeek(dateStr,userName);
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -270,38 +341,38 @@ public class ReportByWeekFragment extends Fragment {
             }
 
         }.start();
-        while(entriesInter.size() !=7 )
-            continue;
-        ValueFormatter formatterInter = new  ValueFormatter() {
-            @Override
-            public String getAxisLabel(float value, AxisBase axis) {
-                return valuesInter[(int) value];
-            }
-
-        };
-
-        xAxisInter.setGranularity(1f); // minimum axis-step (interval) is 1
-        xAxisInter.setValueFormatter(formatterInter);
-        xAxisInter.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxisInter.setDrawLabels(true);
-        Legend legendInter = interruptChart.getLegend();
-        legendInter.setEnabled(false);
-        Description descriptionInter = new Description();
-        descriptionInter.setText("");
-        interruptChart.setDescription(descriptionInter);
-
-        //entriesInter.add(new BarEntry(0, 2));
-        //entriesInter.add(new BarEntry(1, 2));
-        //entriesInter.add(new BarEntry(2, 0));
-        BarDataSet setInter = new BarDataSet(entriesInter, "BarDataSetInter");
-        setInter.setColor(Color.parseColor("#FFA500"));
-        BarData dataInter = new BarData(setInter);
-        dataInter.setBarWidth(0.9f); // set custom bar width
-        interruptChart.setData(dataInter);
-        interruptChart.setFitBars(true); // make the x-axis fit exactly all bars
-        interruptChart.invalidate(); // refresh
-
-        setInterruptTimesByWeek(dateStr,userName);
+        //while(entriesInter.size() !=7 )
+            //continue;
+//        ValueFormatter formatterInter = new  ValueFormatter() {
+//            @Override
+//            public String getAxisLabel(float value, AxisBase axis) {
+//                return valuesInter[(int) value];
+//            }
+//
+//        };
+//
+//        xAxisInter.setGranularity(1f); // minimum axis-step (interval) is 1
+//        xAxisInter.setValueFormatter(formatterInter);
+//        xAxisInter.setPosition(XAxis.XAxisPosition.BOTTOM);
+//        xAxisInter.setDrawLabels(true);
+//        Legend legendInter = interruptChart.getLegend();
+//        legendInter.setEnabled(false);
+//        Description descriptionInter = new Description();
+//        descriptionInter.setText("");
+//        interruptChart.setDescription(descriptionInter);
+//
+//        //entriesInter.add(new BarEntry(0, 2));
+//        //entriesInter.add(new BarEntry(1, 2));
+//        //entriesInter.add(new BarEntry(2, 0));
+//        BarDataSet setInter = new BarDataSet(entriesInter, "BarDataSetInter");
+//        setInter.setColor(Color.parseColor("#FFA500"));
+//        BarData dataInter = new BarData(setInter);
+//        dataInter.setBarWidth(0.9f); // set custom bar width
+//        interruptChart.setData(dataInter);
+//        interruptChart.setFitBars(true); // make the x-axis fit exactly all bars
+//        interruptChart.invalidate(); // refresh
+//
+//        setInterruptTimesByWeek(dateStr,userName);
 
 
 
